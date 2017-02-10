@@ -1,0 +1,198 @@
+/**
+ * grunt/pipeline.js
+ *
+ * The order in which your css, javascript, and template files should be
+ * compiled and linked from your views and static HTML files.
+ *
+ * (Note that you can take advantage of Grunt-style wildcard/glob/splat expressions
+ * for matching multiple files.)
+ */
+
+
+
+// CSS files to inject in order
+//
+// (if you're using LESS with the built-in default config, you'll want
+//  to change `assets/styles/importer.less` instead.)
+var cssFilesToInject = [
+  'styles/my.css',
+
+  "bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css",
+  "bower_components/angular-ui-tree/dist/angular-ui-tree.min.css",
+  "bower_components/angular-toggle-switch/angular-toggle-switch.css",
+  "bower_components/ng-grid/ng-grid.css",
+  "bower_components/angular-xeditable/dist/css/xeditable.css",
+  "bower_components/select2/select2.css",
+  "bower_components/jScrollPane/style/jquery.jscrollpane.css",
+
+
+  "src/app/assets/fonts/glyphicons/css/glyphicons.min.css",
+  "src/app/assets/plugins/icheck/all.css",
+  "src/app/assets/plugins/icheck/**/*.css",
+  "src/app/assets/plugins/form-multiselect/css/multi-select.css",
+  "src/app/assets/plugins/form-fseditor/fseditor.css",
+  "src/app/assets/plugins/form-tokenfield/bootstrap-tokenfield.css",
+  "src/app/assets/plugins/datepaginator/bootstrap-datepaginator.css",
+  "src/app/assets/plugins/jquery-fileupload/css/jquery.fileupload-ui.css",
+  "src/app/assets/plugins/bootstro.js/bootstro.min.css",
+  "src/app/assets/plugins/progress-skylo/skylo.css",
+  "src/app/assets/plugins/jcrop/css/jquery.Jcrop.min.css",
+  "src/app/assets/plugins/form-daterangepicker/daterangepicker-bs3.css",
+  "src/app/assets/plugins/form-markdown/css/bootstrap-markdown.min.css",
+  "src/app/assets/plugins/pines-notify/jquery.pnotify.default.css",
+  "src/app/assets/plugins/codeprettifier/prettify.css",
+  "src/app/assets/plugins/form-select2/select2.css",
+  "src/app/assets/plugins/fullcalendar/fullcalendar.css",
+
+  "src/app/assets/css/main.css",
+  "src/app/assets/css/styles.css",
+
+  'styles/**/*.css'
+];
+
+
+var imageFilesToInject = [
+  'bower_components/angular-tree-control/images/file.png',
+  'bower_components/angular-tree-control/images/folder.png',
+  'bower_components/angular-tree-control/images/folder-closed.png',
+
+  'src/app/assets/demo/avatar/*.png',
+
+
+  'images/**/*.png',
+  'images/**/*.jpg',
+  'images/**/*.jpeg'
+//    'styles/**/*.css'
+];
+
+// Client-side javascript files to inject in order
+// (uses Grunt-style wildcard/glob/splat expressions)
+
+var jsFilesToInject = [
+  'bower_components/angular/angular.js',
+  "bower_components/jquery/dist/jquery.min.js",
+  'bower_components/angular-ui-router/release/angular-ui-router.js',
+  'bower_components/angular-ui-utils/modules/route/route.js',
+  'bower_components/socket.io-client/dist/socket.io.min.js',
+  'bower_components/sails.io.js/dist/sails.io.js',
+  'bower_components/angular-sails/dist/angular-sails.js',
+  'bower_components/lodash/dist/lodash.js',
+  'bower_components/moment/moment.js',
+  'bower_components/moment/locale/zh-cn.js',
+  'bower_components/angular-moment/angular-moment.js',
+  'bower_components/angular-local-storage/dist/angular-local-storage.min.js',
+  'bower_components/angular-permission/dist/angular-permission.js',
+  'bower_components/angular-notify/dist/angular-notify.min.js',
+  'bower_components/validator-js/validator.min.js',
+  'bower_components/async/lib/async.js',
+
+// new part
+  "bower_components/es5-shim/es5-shim.js",
+  "bower_components/modernizr/modernizr.js",
+  "bower_components/angular-resource/angular-resource.js",
+  "bower_components/angular-cookies/angular-cookies.js",
+  "bower_components/angular-sanitize/angular-sanitize.js",
+  "bower_components/angular-route/angular-route.js",
+  "bower_components/angular-mocks/angular-mocks.js",
+  "bower_components/angular-animate/angular-animate.js",
+  "bower_components/bootstrap/dist/js/bootstrap.min.js",
+  "bower_components/seiyria-bootstrap-slider/js/bootstrap-slider.js",
+  "bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
+  "bower_components/jquery.ui/ui/jquery.ui.core.js",
+  "bower_components/jquery.ui/ui/jquery.ui.widget.js",
+  "bower_components/jquery.ui/ui/jquery.ui.mouse.js",
+  "bower_components/jquery.ui/ui/jquery.ui.draggable.js",
+  "bower_components/jquery.slimscroll/jquery.slimscroll.min.js",
+  "bower_components/jquery.easing/js/jquery.easing.min.js",
+  "bower_components/flot/jquery.flot.js",
+  "bower_components/flot/jquery.flot.stack.js",
+  "bower_components/flot/jquery.flot.pie.js",
+  "bower_components/flot/jquery.flot.resize.js",
+  "bower_components/flot.tooltip/js/jquery.flot.tooltip.js",
+  "bower_components/angular-ui-tree/dist/angular-ui-tree.js",
+  "bower_components/jqvmap/jqvmap/jquery.vmap.js",
+  "bower_components/jqvmap/jqvmap/maps/jquery.vmap.world.js",
+  "bower_components/jqvmap/jqvmap/data/jquery.vmap.sampledata.js",
+  "bower_components/angular-toggle-switch/angular-toggle-switch.min.js",
+  "bower_components/ng-grid/build/ng-grid.js",
+  "bower_components/angular-xeditable/dist/js/xeditable.js",
+  "bower_components/select2/select2.js",
+  "bower_components/angular-ui-select2/src/select2.js",
+  "bower_components/iCheck/icheck.min.js",
+  "bower_components/google-code-prettify/src/prettify.js",
+  "bower_components/bootbox.js/bootbox.js",
+  "bower_components/jquery-autosize/jquery.autosize.js",
+  "bower_components/momentjs/moment.js",
+  "bower_components/bootstrap-daterangepicker/daterangepicker.js",
+  "bower_components/jquery.pulsate/jquery.pulsate.js",
+  "bower_components/jquery.knob/js/jquery.knob.js",
+  "bower_components/jquery.sparkline/index.js",
+  "bower_components/flow.js/dist/flow.js",
+  "bower_components/ng-flow/dist/ng-flow.js",
+  "bower_components/jScrollPane/script/jquery.mousewheel.js",
+  "bower_components/jScrollPane/script/mwheelIntent.js",
+  "bower_components/jScrollPane/script/jquery.jscrollpane.min.js",
+  "bower_components/enquire/dist/enquire.js",
+  "bower_components/shufflejs/dist/jquery.shuffle.js",
+
+  "src/app/assets/plugins/pines-notify/jquery.pnotify.min.js",
+  "src/app/assets/plugins/form-datepicker/js/bootstrap-datepicker.js",
+  "src/app/assets/plugins/easypiechart/angular.easypiechart.js",
+  "src/app/assets/plugins/datepaginator/bootstrap-datepaginator.js",
+  "src/app/assets/plugins/form-multiselect/js/jquery.multi-select.min.js",
+  "src/app/assets/plugins/form-colorpicker/js/bootstrap-colorpicker.min.js",
+  "src/app/assets/plugins/form-fseditor/jquery.fseditor-min.js",
+  "src/app/assets/plugins/form-jasnyupload/fileinput.js",
+  "src/app/assets/plugins/progress-skylo/skylo.js",
+  "src/app/assets/plugins/bootstro.js/bootstro.min.js",
+
+  "src/app/scripts/**/*.js"
+  // All of the rest of your app scripts
+//  'src/**/*.js'
+];
+
+var fontFilesToInject = [
+  "fonts/**/*"
+];
+
+module.exports.jsFilesToInjectNoPathChange = jsFilesToInject;
+module.exports.fontFilesToInjectNoPathChange = fontFilesToInject;
+module.exports.cssFilesToInjectNoPathChange = cssFilesToInject;
+module.exports.imageFilesToInjectNoPathChange = imageFilesToInject;
+
+
+// Client-side HTML templates are injected using the sources below
+// The ordering of these templates shouldn't matter.
+// (uses Grunt-style wildcard/glob/splat expressions)
+//
+// By default, Sails uses JST templates and precompiles them into
+// functions for you.  If you want to use jade, handlebars, dust, etc.,
+// with the linker, no problem-- you'll just want to make sure the precompiled
+// templates get spit out to the same file.  Be sure and check out `tasks/README.md`
+// for information on customizing and installing new tasks.
+var templateFilesToInject = [
+  // 'templates/**/*.html'
+  'src/**/*.tpl.html'
+];
+
+
+// Prefix relative paths to source files so they point to the proper locations
+// (i.e. where the other Grunt tasks spit them out, or in some cases, where
+// they reside in the first place)
+module.exports.cssFilesToInject = cssFilesToInject.map(function(path) {
+  return '.tmp/public/' + path;
+});
+
+module.exports.imageFilesToInject = imageFilesToInject.map(function(path) {
+  return '.tmp/public/' + path;
+});
+
+module.exports.jsFilesToInject = jsFilesToInject.map(function(path) {
+  return '.tmp/public/' + path;
+});
+module.exports.fontFilesToInject = fontFilesToInject.map(function(path) {
+  return '.tmp/public/' + path;
+});
+module.exports.templateFilesToInject = templateFilesToInject.map(function(path) {
+  return 'assets/' + path;
+});

@@ -1,0 +1,385 @@
+
+.panel-white {
+    background-color: #fff;
+    /*background-color: grey;*/
+}
+
+.panel-white.panel-heading {
+    color: red !important;
+}
+
+.panel-body {
+    padding: 3px 8px 8px 8px !important;
+}
+
+.panel .panel-heading h4 {
+    color: #000 !important;
+}
+
+.text-dark {
+    color: grey;
+}
+
+.am-color {
+    color: rgb(215, 203, 84);
+}
+
+.fm-color {
+    color: rgb(112, 216, 208);
+}
+
+.bold-font {
+    font-weight: bold;
+}
+
+.xx-small {
+    font-size: xx-small;
+}
+
+.ctrl-toggle {
+    background-color: rgb(239, 239, 239);
+    line-height: 20px !important;
+    margin-top: 10px !important;
+    border-radius: 5px;
+    padding: 0 6px;
+    font-size: small;
+    margin-left: -5px !important;
+    cursor: pointer;
+}
+
+.ctrl-toggle-active {
+    background-color: #7dbaff !important;
+    color: #ffffff !important;
+    font-weight: bold;
+}
+
+.sensor-panel {
+    background-color: rgb(245, 244, 244);
+    padding: 6px 12px;
+    margin-top: 4px;
+    border-radius: 5px;
+    height: 50px;
+    /*padding:0 8px;*/
+}
+
+.sensor-green {
+    color: rgb(109, 213, 109);
+}
+
+.sensor-number {
+    font-size: large;
+    /*padding:2px 10px;*/
+    padding: 2px 2px 2px 10px;
+    border-radius: 4px;
+}
+
+.sensor-clock {
+    margin-top: 2px !important;
+    margin-right: 4px !important;
+}
+
+.wendu_label {
+    background-color: rgb(252, 250, 129);
+    padding: 0 4px;
+    border-radius: 4px;
+}
+
+.shidu_label {
+    background-color: rgb(166, 205, 50);
+    color: #fff;
+    padding: 0 3px;
+    border-radius: 5px;
+}
+
+th, td {
+    min-width: 100px;
+}
+
+.padding-left-3 {
+    padding-left: 3px !important;
+}
+
+.rightbar-status-spot-green {
+    font-size: 0.1em;
+    padding-top: 3px;
+    padding-right: 8px;
+    color: rgb(124, 200, 63);
+}
+
+.rightbar-status-spot-grey {
+    font-size: 0.1em;
+    padding-top: 3px;
+    padding-right: 8px;
+    color: rgb(192, 192, 192);
+}
+
+.rightbar-status-spot-red {
+    font-size: 0.1em;
+    padding-top: 3px;
+    padding-right: 8px;
+    color: rgb(228, 120, 149);
+}
+
+.rightbar-status-spot-eye {
+    font-size: 0.1em;
+    color: rgb(184, 184, 184);
+    margin-left: 5px;
+}
+
+.rightbar-status-group-eye {
+    color: #666565;
+}
+
+.rightbar-status-group-eye-slash {
+    color: #838282;
+    text-decoration: line-through;
+}
+
+.topNegative1000 {
+    top: -1000px !important;
+}
+
+.topZero {
+    top: 0 !important;
+}
+
+.mainview-animation {
+    position: relative;
+}
+
+.mainview-animation.ng-enter {
+    -webkit-transition: .3s linear all;
+    /* Safari/Chrome */
+    -moz-transition: .3s linear all;
+    /* Firefox */
+    -o-transition: .3s linear all;
+    /* Opera */
+    transition: .3s linear all;
+    /* IE10+ and Future Browsers */
+}
+
+/**
+ * Pre animation -> enter
+ */
+.mainview-animation.ng-enter {
+    /* The animation preparation code */
+    opacity: 0;
+}
+
+/**
+ * Post animation -> enter
+ */
+.mainview-animation.ng-enter.ng-enter-active {
+    /* The animation code itself */
+    opacity: 1;
+}
+
+.angular-google-map-container {
+    height: 300px;
+}
+
+.navbar.navbar-default.ng-hide {
+    display: none;
+}
+
+#page-rightbar .jspHorizontalBar {
+    /*display: none !important;*/
+}
+
+.fc-grid .fc-day-number {
+    padding: 5px 6px;
+}
+
+.logout-lable {
+    text-align: right;
+    padding-right: 20px;
+    font-weight: bold;
+}
+
+.logout-lable:hover {
+    background-color: rgb(236, 240, 227);
+    cursor: pointer;
+}
+
+/*首页设备列表样式*/
+
+.price {
+    background: #fff none repeat scroll 0 0;
+    color: #525252;
+    padding: 15px;
+    margin-right: 15px;
+    list-style-type: none;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.price_number{
+    text-align: center;
+    font-size: 1.1em;
+    margin-top: 10px;
+}
+
+.online_block:hover{
+    /*background-color: #398439;*/
+    background-color: #84B9E0;
+}
+
+.offline_block:hover{
+    /*background-color: #c12e2a;*/
+   /* background-color: #9c9c9c;*/
+    background-color: #9c9c9c;
+}
+
+/*Features*/
+.features {
+    margin: 0;
+    padding: 0;
+    height: 260px;
+    width: 190px;
+    min-height: 260px;
+    min-width: 190px;
+    text-align: left;
+    background-color: #9DD6A6;
+}
+
+.features li {
+    padding: 8px 15px;
+    font-size: 1em;
+    list-style-type: none;
+}
+
+.pidIntroduce {
+    font-size: 1.1em;
+    margin-top: 30px;
+    margin-left: 20px;
+
+}
+
+.pidHead hr{
+    height: 1px;
+    float: left;
+    width: 45%;
+    border: none;
+    border-top: 1px solid #D5D5D5;
+    margin-left: 15px;
+}
+
+.pidHead input{
+    float: left;
+    margin-right: -5px;
+    margin-left: 10px;
+}
+
+.pid{
+    margin: 10px;
+}
+
+.pid a{
+    background-color: #F15B40;
+    text-decoration: none!important;
+    font-size: 1.1em;
+    display: inline-block;
+    width: 100%;
+    color: #FFFFFF!important;
+    line-height: 28px;
+    text-align: center;
+    margin-left: 10px;
+    font-weight: normal;
+    margin-top: 6px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.pid a:active{
+    background-color: #c12e2a;
+}
+
+.offline_state{
+    color: #c12e2a;
+}
+
+.features a{
+    width:100px;
+    height:28px;
+    line-height:28px;
+    margin-top:12px;
+    margin-left: 20px;
+    background-color: #F15B40;
+    text-decoration: none!important;
+    font-size: 1.1em;
+    display: inline-block;
+    color: #FFFFFF!important;
+    text-align: center;
+    font-weight: normal;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.features a:hover{
+    background-color: #c12e2a;
+}
+
+
+
+#v_box {
+    width: 660px;
+    height: 500px;
+    background: #fff;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 522222;
+    margin-top: -305px;
+    margin-left: -350px;
+    border-radius: 5px;
+    box-shadow: #333 0px 0px 10px;
+    _position: absolute;
+    *border: 1px solid #333;
+    border: 1px solid #333 \0;
+    display: none;
+}
+
+#v_box h3 {
+    color: #333;
+    height: 46px;
+    font-size: 18px;
+    /*padding-left: 28px;*/
+    text-align: center;
+    line-height: 46px;
+    overflow: hidden;
+    font-weight: bold;
+}
+
+#v_box div {
+    width: 600px;
+    margin: 0 auto;
+    background: #000;
+}
+
+#shut {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    display: block;
+    top: 8px;
+    right: 10px;
+    color: #333;
+    font-size: 30px;
+    line-height: 22px;
+    overflow: hidden;
+    text-align: center;
+    cursor: pointer;
+}
+
+#shut:hover {
+    text-decoration: none;
+    color: #f00;
+}
+
+#shut:active {
+    color: #a40606;
+}
+

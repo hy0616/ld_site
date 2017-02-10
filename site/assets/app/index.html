@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>联点数据综合管理平台</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Forza">
+    <meta name="author" content="Ndevr Studios & The Red Team">
+    <meta property="qc:admins" content="5701516423475461561167414163757">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- <script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" charset="utf-8" data-callback="true"></script> -->
+
+    <!-- inject:css -->
+    <link rel="stylesheet" href="assets/css/all.gz.css">
+    <!-- endinject -->
+
+    <link href="//cdn.bootcss.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="//cdn.bootcss.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="assets/plugins/Navigation/zzsc-demo.css">
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!--[if lt IE 9]>
+    <link rel="stylesheet" href="assets/css/ie8.css">
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body class=""
+      ng-app="mainApp"
+      ng-controller="MainController"
+      ng-class="{
+                    'static-header': !style_fixedHeader,
+                    'focusedform': style_fullscreen,
+                    'fixed-layout': style_layoutBoxed,
+                    'collapse-leftbar': style_leftbarCollapsed && !style_leftbarShown,
+                    'show-rightbar': style_rightbarCollapsed,
+                    'show-leftbar': style_leftbarShown
+                    }"
+      ng-click="hideSearchBar();hideHeaderBar()"
+      ng-cloak>
+
+<div id="headerbar" ng-class="{topNegative1000: style_headerBarHidden, topZero: !style_headerBarHidden}">
+
+
+</div>
+<!--headerbar-->
+
+<header class="navbar navbar-inverse" style="z-index:10001;/*background-color:#494A5F*/;height:45px;background-color: #fff;
+            border-bottom: 1px solid #E0E0E0;"
+        ng-class="{'navbar-fixed-top': style_fixedHeader, 'navbar-static-top': !style_fixedHeader}" role="banner">
+    <!--<a id="leftmenu-trigger" tooltip-placement="right" tooltip="展开侧边栏" ng-click="toggleLeftBar()"></a>-->
+
+   <!-- <div id="demo_box" tooltip-placement="right" tooltip="展开导航">
+        &lt;!&ndash;<span class="pop_ctrl"><i class="fa fa-bars"></i></span>&ndash;&gt;
+        <span class="pop_ctrl"><img src="assets/img/hav.png"></span>
+        <ul ng-controller="NavigationController">
+            <li ng-repeat="item in menu">
+                <a ng-click="select(item)" ng-href="{{item.url}}">
+                    <i ng-if="item.iconClasses" class="{{item.iconClasses}}"></i>
+
+                    <div><span>{{item.label}}</span></div>
+                    <span ng-bind-html="item.html"></span>
+                </a>
+                <ul ng-if="item.children.length" data-slide-out-nav="item.open">
+                    <li ng-repeat="item in item.children"
+                        ng-include="'templates/nav_renderer.html'">
+                    </li>
+                </ul>
+            </li>
+
+        </ul>
+    </div>-->
+
+    <div class="navbar-header">
+        <div style="font-size:1.2em !important;font-weight:bolder;color:rgb(253, 253, 253);margin-left: 10px">
+            <a ng-href="/" style="text-decoration: none;overflow: hidden;display: inline-block">
+                <div style="float:left;margin-top: 2px">
+                    <img src="assets/img/onenet.png">
+                </div>
+                <div style="width: 250px;text-align: center;">
+                    <img style="margin: 0 auto;padding: 0" src="assets/img/linkdotter.png" alt="LDloco">
+                    <p style="margin: 0 auto;padding: 0">联点数据物联网监控云平台</p>
+                </div>
+
+
+            </a>
+        </div>
+
+    </div>
+
+    <ul class="nav navbar-nav pull-right">
+        <li>
+            <!--<a data-toggle="dropdown" class="dropdown-toggle" style="color: #25a9ff"><span class="hidden-xs"><i
+                    class="fa fa-user"></i>&nbsp;{{username}}</span>
+                <b class="caret"></b>
+            </a>-->
+
+            <a data-toggle="dropdown" class="dropdown-toggle" style="color: #25a9ff;padding: 6px 15px;"><span class="hidden-xs"><img
+                   src="assets/img/user.png">&nbsp;{{username}}</span>
+                <b class="caret"></b>
+            </a>
+
+            <ul class="dropdown-menu" style="text-align: center;font-size: 15px;margin-top: 6px;margin-right: 6px;border: 1px solid #ADADAD">
+                <li >
+                    <a href="#/personalSettings">
+                        <img src="assets/img/personalSettings.png">
+                        <span>个人设置</span>
+                    </a>
+
+                </li>
+                <li >
+                    <a ng-click="logOut()">
+                        <img src="assets/img/out.png">
+                        <span>退出登录</span>
+                    </a>
+
+                </li>
+
+            </ul>
+        </li>
+    </ul>
+
+    <div ng-show="push_state" class="nav pull-right" style="margin-right: 15px;margin-top: 6px">
+        <div class="circle"><p>{{messages}}</p></div>
+    </div>
+    <div class="nav pull-right" ng-click="refresh_state()"
+         style=" position:relative;top: 8px;z-index: -1;right: 15px"
+         ng-class="{'logo_right':!push_state}">
+        <a ng-href="{{url}}">
+            <img src="assets/img/warning.png">
+        </a>
+
+    </div>
+
+
+</header>
+
+<div id="page-container" class="clearfix">
+
+    <nav id="page-leftbar" role="navigation">
+
+        <div>
+            <ul ng-controller="NavigationController" id="sidebar" sticky-scroll="40"
+                style="background-color: #FAFAFA">
+
+                <li ng-repeat="item in menu"
+                    ng-class="{ hasChild: (item.children!==undefined),
+                                      active: item.selected,
+                                      open: (item.children!==undefined) && item.open }"
+                    ng-include="'./views/templates/nav_renderer.html'">
+                </li>
+            </ul>
+        </div>
+        <!-- END SIDEBAR MENU -->
+    </nav>
+
+    <div ng-include="'views/DevListSideBar.html'"></div>
+
+    <div id="page-content" class="clearfix" fit-height>
+        <div id="wrap" ng-view="" class="mainview-animation">
+        </div>
+    </div>
+    <!-- page-content -->
+
+    <footer role="contentinfo">
+        <div class="clearfix">
+            <ul class="list-unstyled list-inline pull-left">
+                <li>LinkDotter &copy; 2015</li>
+            </ul>
+            <button class="pull-right btn btn-default btn-xs hidden-print" back-to-top style="padding: 1px 10px;"><i
+                    class="fa fa-angle-up"></i></button>
+        </div>
+    </footer>
+
+</div>
+<!-- page-container -->
+
+<!--[if lt IE 9]>
+<script src="bower_components/es5-shim/es5-shim.js"></script>
+<script src="bower_components/json3/lib/json3.min.js"></script>
+<script src="../bower_components/es5-shim/es5-shim.js"></script>
+
+<![endif]-->
+
+<!-- <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.5&ak=b6kLIzGgBCtDB43c3kBr2HP0"></script> -->
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=b6kLIzGgBCtDB43c3kBr2HP0"></script>
+<script type="text/javascript"
+        src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/TextIconOverlay_min.js"></script>
+<script type="text/javascript"
+        src="http://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer_min.js"></script>
+<script src="assets/plugins/video/ckplayer/ckplayer.js"></script>
+<!-- inject:js -->
+<script src="scripts/lib_js_all.gz.js"></script>
+<script src="scripts/logic_js_all.gz.js"></script>
+<!-- endinject -->
+
+<script src="assets/plugins/Navigation/jquery.popmenu.js"></script>
+<script>
+    $(function () {
+        $('#demo_box').popmenu();
+
+    })
+</script>
+
+</body>
+</html>

@@ -1,0 +1,98 @@
+/**
+ * Created by xieyiming on 15-2-27.
+ */
+
+angular.module('service.auth', [
+  'LocalStorageModule'
+])
+
+//  .config(function($httpProvider){
+//    $httpProvider.interceptors.push("AuthInterceptor");
+//  })
+
+  .config(function(localStorageServiceProvider){
+    localStorageServiceProvider
+      .setPrefix('mc')
+      .setStorageType('localStorage')
+    //    localStorageServiceProvider.setStorageType('sessionStorage');
+
+  })
+
+
+  .service("AuthService", ["$q", '$rootScope', 'localStorageService', '$http', function ($q, $rootScope, localStorageService, $http) {
+    var self = this
+
+    self.isAdmin = function(){
+      return true
+    }
+
+    self.getToken = function() {
+      return localStorageService.get('auth_token');
+    }
+
+    self.getCurrentUser = function(){
+      return localStorageService.get('user');
+    }
+
+    self.getgetCurrentUserName = function(){
+      var user = localStorageService.get('user')
+
+      if(!_.isNull(user)){
+        return localStorageService.get('user').username;
+      }
+      return ''
+    }
+
+    self.isLogin = function() {
+      if(_.isNull(localStorageService.get('user'))){
+        return false
+      } else {
+        return true
+      }
+    }
+
+    self.login = function(userinfo) {
+//      localStorageService.set("user", userinfo.user);
+//      localStorageService.set("auth_token", userinfo.token);
+//      var deferred = $q.defer();
+
+
+      return $http.post('/api/auth/login', userinfo)
+        .success(function(response) {
+          localStorageService.set("user", response.user);
+          localStorageService.set("auth_token", response.token);
+//          deferred.resolve();
+        })
+
+//      return deferred.promise;
+//      console.log("authservice login: ", userinfo)
+
+    };
+
+    self.logout = function() {
+      // The backend doesn't care about logouts, delete the token and you're good to go.
+      console.log("user logout");
+      var deferred = $q.defer();
+
+      setTimeout(function(){
+        localStorageService.remove('user');
+        localStorageService.remove('auth_token');
+        return deferred.resolve();
+      })
+
+      return deferred.promise;
+    };
+
+    self.signup = function(userinfo) {
+//        localStorageService.remove('auth_token');
+      console.log("##  AuthService register", userinfo)
+
+      return $http.post('/api/auth/signup', userinfo)
+        .success(function(response){
+          localStorageService.set("user", response.user);
+          localStorageService.set("auth_token", response.token);
+        });
+    };
+
+
+  }])

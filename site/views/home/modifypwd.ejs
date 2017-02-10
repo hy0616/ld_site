@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>联点数据智慧云平台</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="qc:admins" content="5701516423475461561167414163757">
+
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../bower_components/jquery/dist/jquery.min.js"><\/script>')</script>
+
+    <link rel="stylesheet" href="assets/plugins/login/login.css">
+    <link rel="stylesheet" href="assets/plugins/login/toastmessage/jquery.toastmessage.css">
+
+</head>
+<body>
+<header>
+    <div>
+        <h1 style="color:white;">联点数据智慧云平台</h1>
+        <a href="/">首页</a>
+    </div>
+</header>
+
+<div class="container reset">
+
+    <ul>
+        <li class="switch_phone">手机找回</li>
+        <li>|</li>
+        <li class="switch_email">邮箱找回</li>
+    </ul>
+
+    <form class="form email_reset">
+        <!--<h4>请输入您账号绑定的邮箱地址</h4>-->
+        <dl>
+            <dt>邮箱 :&nbsp;</dt>
+            <dd>
+                <input class="reset-val" type="text" placeholder="请输入您账号绑定的邮箱地址">
+            </dd>
+        </dl>
+
+        <dl>
+            <dt>验证码 :&nbsp;</dt>
+            <dd>
+                <input type="text" class="js-register-authCode"/>
+                <input type="button" class="authCode-style"/>
+                <a href="javascript:" id="validate">看不清</a>
+            </dd>
+        </dl>
+
+        <button type="button" id="email_reset_button">确认</button>
+
+    </form>
+
+    <form class="form phone_reset">
+        <!-- <h4>密码找回</h4>-->
+        <dl>
+            <dt>手机号 :&nbsp;</dt>
+            <dd>
+                <input class="reset_id" type="text">
+            </dd>
+        </dl>
+        <dl>
+            <dt>密码 :&nbsp;</dt>
+            <dd>
+                <input class="reset_password" type="password"/>
+            </dd>
+        </dl>
+        <dl>
+            <dt>手机验证码 :&nbsp;</dt>
+            <dd>
+                <input class="reset_smsCode" type="password"/>
+                <a id="get_smsCode">获取验证码</a>
+            </dd>
+        </dl>
+
+        <!--<a class="switch_email">邮箱找回</a>-->
+
+        <button type="button" id="phone_reset_button">确认</button>
+    </form>
+
+    <form class="form retSuccess">
+        <h4>用户信息</h4>
+        <dl>
+            <dt>用户名 :&nbsp;</dt>
+            <dd>
+                <span class="reset_username"></span>
+            </dd>
+        </dl>
+        <dl>
+            <dt>电&nbsp;&nbsp;&nbsp;&nbsp;话 :&nbsp;</dt>
+            <dd>
+                <span class="reset_phone"></span>
+            </dd>
+        </dl>
+        <dl>
+            <dt>邮&nbsp;&nbsp;&nbsp;&nbsp;箱 :&nbsp;</dt>
+            <dd>
+                <span class="reset_email"></span>
+            </dd>
+        </dl>
+
+        <a href="/" id="return_login">返回登录</a>
+    </form>
+
+</div>
+
+<footer>
+    <div>
+        <img src="assets/img/linkdotter.png">
+
+        <p style="margin-top: 4px">联点数据智慧云平台</p>
+    </div>
+    <div class="mainLink">
+        <p>
+            <a href="http://linkdotter.com">主站</a>
+            <a href="http://linkdotter.com/gyld">关于我们</a>
+            <a href="http://linkdotter.com/lxwm">联系我们</a>
+            <a href="">加入我们</a>
+        </p>
+
+        <p style="color: #999;font-size: 14px;margin-top: 10px;">联点数据智慧云 &nbsp; &nbsp; 苏ICP备16002274号-1</p>
+    </div>
+    <div></div>
+</footer>
+
+<script src="assets/plugins/login/toastmessage/jquery.toastmessage.js"></script>
+<script src="//cdn.bootcss.com/velocity/1.2.2/velocity.js"></script>
+<script src="//cdn.bootcss.com/velocity/1.2.2/velocity.ui.min.js"></script>
+<script src="../bower_components/is_js/is.min.js"></script>
+<script src="assets/plugins/login/login.js"></script>
+
+</body>
+</html>

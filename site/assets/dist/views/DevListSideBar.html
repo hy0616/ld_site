@@ -1,0 +1,224 @@
+<style>
+
+    .sensor-panel {
+        background-color: rgb(245, 244, 244);
+        padding: 6px 12px;
+        margin-top: 4px;
+        border-radius: 5px;
+        height: 50px;
+    }
+
+    .sensor-green {
+        color: rgb(109, 213, 109);
+    }
+
+    .sensor-number {
+        font-size: large;
+        padding: 2px 2px 2px 10px;
+        border-radius: 4px;
+    }
+
+    .sensor-clock {
+        margin-top: 2px !important;
+        margin-right: 4px !important;
+    }
+
+    .wendu_label {
+        background-color: rgb(252, 250, 129);
+
+        padding: 0 4px;
+        border-radius: 4px;
+    }
+
+    .shidu_label {
+        background-color: rgb(166, 205, 50);
+        color: #fff;
+        padding: 0 3px;
+        border-radius: 5px;
+    }
+
+    .gGreen {
+        background: -webkit-linear-gradient(90deg, #3CA55C 10%, #B5AC49 90%);
+        /* Chrome 10+, Saf5.1+ */
+        background: -moz-linear-gradient(90deg, #3CA55C 10%, #B5AC49 90%);
+        /* FF3.6+ */
+        background: -ms-linear-gradient(90deg, #3CA55C 10%, #B5AC49 90%);
+        /* IE10 */
+        background: -o-linear-gradient(90deg, #3CA55C 10%, #B5AC49 90%);
+        /* Opera 11.10+ */
+        background: linear-gradient(90deg, #3CA55C 10%, #B5AC49 90%);
+        /* W3C */
+    }
+
+    .gcolor {
+        /*background-color: #5f9ea0;*/
+        /*background-color: #00AEAE;*/
+        background-color: #84B9E0;
+    }
+
+    .badge-success {
+        margin-top: 4px;
+        margin-right: 4px;
+    }
+
+</style>
+<div ng-controller="DevListController" id="page-rightbar" sticky-scroll="40" rightbar-right-position="style_layoutBoxed"
+     style="margin-right:-40px;">
+    <div jscrollpane="{autoReinitialise:true, autoReinitialiseDelay: 100}" style="height: 100%;padding-bottom:40px">
+
+        <accordion close-others="rightbarAccordionsShowOne">
+            <accordion-group is-open="rightbarAccordions[0].open" ng-class="{open:rightbarAccordions[0].open}">
+                <accordion-heading>{{"CHN_SUMMARY" | translate}}</accordion-heading>
+
+                <div class="widget-block gcolor">
+                    <div style="float: left">
+                        <div style="margin-top: 21px;margin-right: 16px; ">
+                            <h5>全国:</h5>
+                        </div>
+
+                        <div style="margin-top: 8px;margin-right: 16px; ">
+                            <h5>个人:</h5>
+                        </div>
+                    </div>
+
+                    <div class="pull-left" style="margin-right:16px;text-align: center">
+                        <small>{{"CHN_TOTAL_CNT" | translate}}</small>
+                        <h5 style="margin-top: 3px">{{totalCnt}}个</h5>
+                        <h5 style="margin-top: 8px">{{personal_totalCnt}}个</h5>
+                    </div>
+                    <div class="pull-left" style="margin-right:16px;text-align: center">
+                        <small>{{"ONLINE"| translate }}</small>
+                        <h5 style="margin-top: 3px">{{onlineCnt}}个</h5>
+                        <h5 style="margin-top: 8px">{{personal_onlineCnt}}个</h5>
+                    </div>
+                    <div class="pull-left" style="text-align: center">
+                        <small>{{"OFFLINE" | translate}}</small>
+                        <h5 style="margin-top: 3px">{{totalCnt - onlineCnt}}个</h5>
+                        <h5 style="margin-top: 8px">{{personal_totalCnt - personal_onlineCnt}}个</h5>
+                    </div>
+                </div>
+
+            </accordion-group>
+            <!-- <div style="font-size:small;padding:4px 10px;margin-bottom:15px">
+                 <span class="pull-right">
+                  <span class="hand" ng-class="{'text-info': 'geo'==curGroupMode}" ng-click="setGroupMode('geo')">
+             <i class="fa fa-hand-o-right" ng-show="'geo'==curGroupMode"></i>
+             地理位置
+           </span>
+                 <i class="fa fa-ellipsis-v"></i>&nbsp;
+                 <span class="hand" ng-class="{'text-info': 'custom'==curGroupMode}" ng-click="setGroupMode('custom')">
+             <i class="fa fa-hand-o-right" ng-show="'custom'==curGroupMode"></i>
+             高级搜索
+           </span>
+                 </span>
+             </div>-->
+            <div ng-show="'geo'==curGroupMode" ng-controller="GeoGroupController">
+                <div ng-repeat="group in geoGroups" style="margin-bottom:5px">
+                    <div style="background-color: #f3f3f3;padding:10px 8px;" ng-if="group.count != 0"
+                         ng-click="group.__isCollapsed = !group.__isCollapsed;showGeoGroupDetail(group.name, group.__isCollapsed)">
+                        <img src="assets/img/jiantou.gif">
+                        <span class="hand" style="font-size: medium;color:#969a91;"
+                                ng-show="group.name === '' || group.name === undefined || group.name === null || group.name === 'undefined'">
+                            未知分组</span>
+                        <span class="hand" style="font-size: medium;color:#969a91;"
+                                ng-show="group.name !== '' && group.name !== undefined && group.name !== null && group.name !== 'undefined'">{{group.name}}</span>
+                        <span class="badge pull-right badge-success">{{group.count}}</span>
+                    </div>
+                    <div collapse="!group.__isCollapsed">
+                        <div ng-hide="group.geoCities.length > 0">
+                            <span style="padding-left:20px;">loading...</span>
+                        </div>
+                        <div ng-repeat="city in group.geoCities" style="color:#676767;margin-top:5px">
+                            <div style="font-size: medium" ng-if="city.count != 0"
+                                 ng-click="city.__isCollapsed = !city.__isCollapsed;showGeoGityDetail(group.name,city.name,city.__isCollapsed)">
+                                <i style="margin-left:20px;"
+                                   ng-class="{'fa fa-plus-square': !city.__isCollapsed,'fa fa-minus-square': city.__isCollapsed , 'light_blue': city.name == curCity}">
+                                    &nbsp;</i>
+                                <span class="hand" ng-show="city.name === '' || city.name === undefined || city.name === null || city.name === 'undefined'"> 未知分组 </span>
+                                <span class="hand" ng-show="city.name !== '' && city.name !== undefined && city.name !== null && city.name !== 'undefined'"> {{city.name}} </span>
+                                <span class="badge pull-right badge-success">{{city.count}}</span>
+                            </div>
+                            <div collapse="!city.__isCollapsed">
+                                <div ng-show="devinfoLoadding">loadding...</div>
+                                <div ng-repeat="district in city.geoDistricts" style="margin-top:2px">
+                                    <div style="font-size: small" ng-if="district.count != 0"
+                                         ng-click="district.__isCollapsed = !district.__isCollapsed;showGeoDistrictDetail(group.name,city.name, district.name,district.__isCollapsed)">
+                                        <i style="margin-left:30px;"
+                                           ng-class="{'fa fa-plus-square': !district.__isCollapsed,'fa fa-minus-square': district.__isCollapsed,'light_blue': district.name == curDistrict}">
+                                            &nbsp;</i>
+
+                                        <span class="hand" ng-show="district.name === '' || district.name === undefined || district.name === null || district.name === 'undefined'"> 未知分组 </span>
+                                        <span class="hand" ng-show="district.name !== '' && district.name !== undefined && district.name !== null && district.name !== 'undefined'"> {{district.name}} </span>
+
+                                        <span class="badge pull-right badge-success">{{district.count}}</span>
+                                    </div>
+                                    <!--city.devinfo: {{city.devinfo}}-->
+                                    <div collapse="!district.__isCollapsed" ng-if="district.count != 0">
+                                        <div ng-show="devinfoLoaddingFlag">loadding...</div>
+                                        <div ng-repeat="dev in district.devinfo"
+                                             style="margin-top:2px;font-size: small">
+                                            <div ng-click="showDevDetail($event, dev.dev_name, dev.sn, dev.lat, dev.lng)">
+                                                <i class="fa fa-map-marker" ng-class="{'light_blue': curDev == dev.sn}"
+                                                   style="margin-left:40px;">&nbsp;</i>
+                                                <span class="hand"ng-class="{'offline_state': dev.online_state == 'offline'}"
+                                                      tooltip-placement="top" tooltip="设备SN: {{dev.sn}}">{{dev.dev_name}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--city collapse-->
+                        </div>
+                        <!--device group-->
+                    </div>
+                </div>
+            </div>
+            <div ng-show="'custom'==curGroupMode" ng-controller="CustomGroupController">
+                <div class="container">
+                    <span><i class="fa fa-map-marker"></i>&nbsp;省份：</span>
+                    <ui-select class="" multiple ng-model="Select.province" theme="bootstrap" ng-disabled="disabled"
+                               on-select="provinceSelect($item)" close-on-select="true" title="选择省份">
+                        <ui-select-match placeholder="选择省份">{{$item}}</ui-select-match>
+                        <ui-select-choices repeat="province in availableProvinces | filter:$select.search">
+                            {{province}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span><i class="fa fa-map-marker"></i>&nbsp;城市：</span>
+                    <ui-select class="" multiple ng-model="Select.city" theme="bootstrap" ng-disabled="disabled"
+                               on-select="cityOnSelect($item)" close-on-select="true" title="选择城市">
+                        <ui-select-match placeholder="选择城市">{{$item}}</ui-select-match>
+                        <ui-select-choices repeat="city in availableCitys | filter:$select.search">
+                            {{city}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span><i class="fa fa-map-marker"></i>&nbsp;地区：</span>
+                    <ui-select class="" multiple ng-model="Select.district" theme="bootstrap" ng-disabled="disabled"
+                               on-select="districtOnSelect($item)" close-on-select="true" title="选择地区">
+                        <ui-select-match placeholder="选择地区">{{$item}}</ui-select-match>
+                        <ui-select-choices repeat="district in availableDistricts | filter:$select.search">
+                            {{district}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span><i class="fa fa-code-fork"></i>&nbsp;主要作物：</span>
+                    <ui-select class="" multiple ng-model="Select.plant" theme="bootstrap" ng-disabled="disabled"
+                               on-select="plantOnSelect($item)" close-on-select="true" title="选择城市">
+                        <ui-select-match placeholder="选择查询作物">{{$item}}</ui-select-match>
+                        <ui-select-choices repeat="plant in availablePlants | filter:$select.search">
+                            {{plant}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <!--&nbsp;&nbsp;-->
+                    <!--<bottom class="btn btn-default btn-sm" ng-click="groupsSubmit(multipleSelect.groups)">确定</bottom>-->
+                    <br>
+
+                    <div class="btn btn-success btn-sm pull-right" ng-click="searchCustom()">确定</div>
+                </div>
+            </div>
+        </accordion>
+        <!--accordion-->
+    </div>
+    <!--jscrollpane-->
+</div>
+<!--DevListController-->
+<!-- END RIGHTBAR -->

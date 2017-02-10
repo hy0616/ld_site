@@ -1,0 +1,145 @@
+<style>
+  .light_blue {
+    color: rgb(94, 169, 212) !important;
+  }
+
+  .white {
+    color: white
+  }
+</style>
+
+
+<!-- BEGIN RIGHTBAR -->
+<div ng-controller="RightBarController" id="page-rightbar" sticky-scroll="40" rightbar-right-position="style_layoutBoxed" style="z-index: 10000;margin-right:-80px;">
+  <div jscrollpane="{autoReinitialise:true, autoReinitialiseDelay: 100}" style="height: 100%;padding-bottom:40px">
+    <accordion close-others="rightbarAccordionsShowOne">
+      <accordion-group is-open="rightbarAccordions[0].open" ng-class="{open:rightbarAccordions[0].open}">
+        <accordion-heading>监测概况</accordion-heading>
+
+        <div class="widget-block mt10 mb0" style="background: #4f5259;">
+          <div class="pull-left" style="margin-right:20px">
+            <small>大棚个数</small>
+            <h5>13个</h5>
+          </div>
+
+          <div class="pull-left" style="margin-right:20px">
+            <small>传感器</small>
+            <h5>41个</h5>
+          </div>
+
+          <div class="pull-left">
+            <small>故障点</small>
+            <h5 class="text-danger">4个</h5>
+          </div>
+        </div>
+      </accordion-group>
+
+
+      <div ng-repeat="group in Groups" style="margin-bottom:5px">
+        <!--todo: move to a directive-->
+        <div style="background-color: #f3f3f3;padding:10px 8px;">
+          <i class="fa fa-eye small-fa">&nbsp;</i>
+            <span class="hand"
+                  ng-click="group.__isCollapsed = !group.__isCollapsed"
+                  style="font-size: small;color:#969a91;">{{group.dev_group}}&nbsp;(7)</span>
+            <span class="pull-right" style="color:#969a91;">
+              <i class="hand"
+                 ng-click="group.__isCollapsed = !group.__isCollapsed"
+                 ng-class="{'fa fa-angle-double-right': !group.__isCollapsed,'fa fa-angle-double-down': group.__isCollapsed}">
+              </i>&nbsp;
+            </span>
+        </div>
+
+        <div collapse="!group.__isCollapsed">
+          <div ng-repeat="device in group.children" style="color:#676767;margin-top:5px;font-size:x-small">
+            <div>
+              <!--<i class="fa fa-circle" style="font-size:0.8em;padding:3px 2px 0px 12px; color:rgb(124,200,63)"></i>-->
+              <i class="fa fa-map-marker" style="margin-left:15px;"
+                 ng-click="locateOnMap(device.lat,device.lng)"
+                 ng-class="{'text-info': curLocation == device.lat+device.lng }">&nbsp;
+              </i>
+
+              <span class="hand" ng-click="device.__isCollapsed = !device.__isCollapsed">{{device.dev_alias}}</span>
+              <i class="pull-right hand"
+                 style="margin-right:15px;margin-top:3px;"
+                 ng-click="device.__isCollapsed = !device.__isCollapsed"
+                 ng-class="{'fa fa-angle-right': device.__isCollapsed,'fa fa-angle-down': !device.__isCollapsed}">
+              </i>
+            </div>
+
+            <div collapse="device.__isCollapsed">
+              <div ng-repeat="item in device.components" style="margin-left:17px;margin-top:2px">
+                <i class="fa fa-ellipsis-v" style="color:#afafaf"></i>&nbsp;<i class="fa fa-circle" style="font-size:0.8em;color:rgb(124,200,63)"></i>
+
+                  <span ng-click="showFreqDetail($event, device.dev_uuid, item.component_id)"
+                        class="hand x-small padding-left-3">
+                    {{item.device_type_alias | uppercase | translate}}
+                    <!--{{item.mode}} - {{item.freq}}-->
+                  </span>
+                <!--<i class="fa fa-circle pull-right text-success rightbar-status-spot-green" style="margin-right:5px"></i>&nbsp;-->
+                <span class="pull-right" style="color:rgb(168,168,168);font-size:x-small;margin-right:20px">编号:{{item.components_id}}</span>
+              </div>
+            </div> <!--collapse-->
+
+          </div><!--device group-->
+
+        </div>
+      </div>
+
+      <div ng-repeat="group in curGroups" style="margin-bottom:5px">
+        <!--todo: move to a directive-->
+        <div  style="background-color: #f3f3f3;padding:10px 8px;">
+          <i class="fa fa-eye small-fa">&nbsp;</i>
+            <span class="hand"
+                  ng-click="__isGroupCollapsed = !__isGroupCollapsed;showGroupDetail(group.name, __isGroupCollapsed)"
+                  style="font-size: small;color:#969a91;">{{group.name}}&nbsp;({{group.count}})</span>
+            <span class="pull-right" style="color:#969a91;">
+              <i class="hand"
+                 ng-click="__isGroupCollapsed = !__isGroupCollapsed;showGroupDetail(group.name, __isGroupCollapsed)"
+                 ng-class="{'fa fa-angle-double-right': !__isGroupCollapsed,'fa fa-angle-double-down': __isGroupCollapsed}">
+              </i>&nbsp;
+            </span>
+        </div>
+
+        <div collapse="!__isGroupCollapsed">
+          <!--group.children: {{group.children.length}}-->
+          <div ng-hide="group.children.length > 0">
+            <span style="padding-left:20px;">loading ...</span>
+          </div>
+
+          <div ng-repeat="device in group.children" style="color:#676767;margin-top:5px;font-size:x-small">
+            <div>
+              <!--<i class="fa fa-circle" style="font-size:0.8em;padding:3px 2px 0px 12px; color:rgb(124,200,63)"></i>-->
+              <i class="fa fa-map-marker" style="margin-left:15px;">&nbsp;
+                <!--ng-class="{'text-info': curLocation == device.lat+device.lng }">&nbsp;-->
+                <!--ng-click="locateOnMap(device.lat,device.lng)"-->
+              </i>
+
+              <span class="hand" ng-click="device.__isCollapsed = !device.__isCollapsed">{{device.common.dev_name}}</span>
+              <i class="pull-right hand"
+                 style="margin-right:15px;margin-top:3px;"
+                 ng-click="device.__isCollapsed = !device.__isCollapsed"
+                 ng-class="{'fa fa-angle-right': device.__isCollapsed,'fa fa-angle-down': !device.__isCollapsed}">
+              </i>
+            </div>
+
+            <div collapse="device.__isCollapsed">
+              <div ng-repeat="item in device.components" style="margin-left:17px;margin-top:2px">
+                <i class="fa fa-ellipsis-v" style="color:#afafaf"></i>&nbsp;<i class="fa fa-circle" style="font-size:0.8em;color:rgb(124,200,63)"></i>
+
+                  <span ng-click="showFreqDetail($event, device.dev_uuid, item.component_id)"
+                        class="hand x-small padding-left-3">
+                    {{item.device_type | uppercase | translate }}
+                  </span>
+                <span class="pull-right" style="color:rgb(168,168,168);font-size:x-small;margin-right:20px">编号:{{item.component_id}}</span>
+              </div>
+            </div> <!--collapse-->
+          </div><!--device group-->
+        </div>
+      </div>
+
+    </accordion>
+  </div>
+</div>
+<!-- END RIGHTBAR -->
+

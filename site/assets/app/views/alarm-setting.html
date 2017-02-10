@@ -1,0 +1,551 @@
+<style>
+    .col-md-4 {
+        width: 160px;
+        float: left;
+    }
+
+    .form-group {
+        width: 500px;
+    }
+
+    .input_size {
+        width: 50px !important;
+        height: 25px;
+    }
+
+    .select_size {
+        width: 400px !important;
+        height: 35px;
+    }
+
+</style>
+
+
+<!-- 按钮触发模态框 -->
+<button data-toggle="modal" data-target="#myModal" ng-click="getsn(dev.smartgate.sn)">设置</button>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">报警门限设置</h4>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-inline" role="form" name="alarm_form" style="overflow: auto;zoom: 1" novalidate>
+                    <div class="form-group" style="width: 560px">
+                        <label class="col-md-2 control-label text-right"
+                               style="height: 34px; line-height:34px;">预设值：</label>
+                        <select class="form-control select_size" ng-model="datas.val"
+                                ng-click="setting_select(datas.val)"
+                                ng-options="select.strategy_name for select in select_strategy"
+                                ng-disabled="datas.temp">
+                            <!--ng-options="select.code as select.name for select in setting.select_list"-->
+                            <option value="">-- 请选择 --</option>
+                        </select>
+                        <input type="checkbox" ng-model="datas.temp" ng-click="setting_checkbox(datas.temp)">自定义
+                    </div>
+                    <br>
+                    <br>
+
+                    <div>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label text-right">低电量</label>
+
+                            <div class="col-md-4">
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.charge_config.enable_l_1"
+                                           name="enable_l_1" ng-disabled="!datas.temp"> 一级
+                                    <input type="text" class="form-control input_size" ng-disabled="!datas.temp"
+                                           ng-model="setting_strategy.charge_config.l_value_1"
+                                           name="l_value_1">&nbsp;&nbsp;%
+                                </label>
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.charge_config.enable_l_2"
+                                           ng-disabled="!setting_strategy.charge_config.enable_l_1 || !datas.temp"
+                                           name="setting_strategy.enable_l_2"> 二级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.charge_config.l_value_2"
+                                           ng-disabled="!setting_strategy.charge_config.l_value_1 || !datas.temp"
+                                           name="l_value_2">&nbsp;&nbsp;%
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <hr>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label text-right">空气高温</label>
+
+                            <div class="col-md-4">
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.air_temperature_config.enable_h_1"
+                                           name="enable_h_1" ng-disabled="!datas.temp"> 一级
+                                    <input type="text" class="form-control input_size" ng-disabled="!datas.temp"
+                                           ng-model="setting_strategy.air_temperature_config.h_value_1"
+                                           name="h_value_1">&nbsp;&nbsp;°C
+                                </label>
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.air_temperature_config.enable_h_2"
+                                           ng-disabled="!setting_strategy.air_temperature_config.enable_h_1 || !datas.temp"
+                                           name="setting_strategy.enable_h_2"> 二级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.air_temperature_config.h_value_2"
+                                           ng-disabled="!setting_strategy.air_temperature_config.h_value_1 || !datas.temp"
+                                           name="h_value_2">&nbsp;&nbsp;°C
+                                </label><br>
+                                <label>
+                                    <input type="checkbox"
+                                           ng-disabled="!setting_strategy.air_temperature_config.enable_h_2 || !datas.temp"
+                                           ng-model="setting_strategy.air_temperature_config.enable_h_3"
+                                           name="enable_h_3"> 三级
+                                    <input type="text" class="form-control input_size" name="h_value_3"
+                                           ng-model="setting_strategy.air_temperature_config.h_value_3"
+                                           ng-disabled="!setting_strategy.air_temperature_config.h_value_2 || !datas.temp">&nbsp;&nbsp;°C
+                                </label>
+                            </div>
+
+
+                            <label class="col-md-2 control-label text-right">空气低温</label>
+
+                            <div class="col-md-4">
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.air_temperature_config.enable_l_1"
+                                           name="enable_l_1" ng-disabled="!datas.temp"> 一级
+                                    <input type="text" class="form-control input_size" ng-disabled="!datas.temp"
+                                           ng-model="setting_strategy.air_temperature_config.l_value_1"
+                                           name="l_value_1">&nbsp;&nbsp;°C
+                                </label><br>
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.air_temperature_config.enable_l_2"
+                                           ng-disabled="!setting_strategy.air_temperature_config.enable_l_1 || !datas.temp"
+                                           name="enable_l_2"> 二级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.air_temperature_config.l_value_2"
+                                           ng-disabled="!setting_strategy.air_temperature_config.l_value_1 || !datas.temp"
+                                           name="l_value_2">&nbsp;&nbsp;°C
+                                </label><br>
+                                <label>
+                                    <input type="checkbox"
+                                           ng-disabled="!setting_strategy.air_temperature_config.enable_l_2 || !datas.temp"
+                                           ng-model="setting_strategy.air_temperature_config.enable_l_3"
+                                           name="enable_l_3"> 三级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.air_temperature_config.l_value_3"
+                                           ng-disabled="!setting_strategy.air_temperature_config.l_value_2 || !datas.temp"
+                                           name="l_value_3">&nbsp;&nbsp;°C
+                                </label>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label text-right">空气高湿</label>
+
+                            <div class="col-md-4">
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.air_humidity_config.enable_h_1"
+                                           name="enable_h_1" ng-disabled="!datas.temp"> 一级
+                                    <input type="text" class="form-control input_size" ng-disabled="!datas.temp"
+                                           ng-model="setting_strategy.air_humidity_config.h_value_1" name="h_value_1">&nbsp;&nbsp;%RH
+                                </label>
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.air_humidity_config.enable_h_2"
+                                           ng-disabled="!setting_strategy.air_humidity_config.enable_h_1 || !datas.temp"
+                                           name="setting_strategy.enable_h_2"> 二级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.air_humidity_config.h_value_2"
+                                           ng-disabled="!setting_strategy.air_humidity_config.h_value_1 || !datas.temp"
+                                           name="h_value_2">&nbsp;&nbsp;%RH
+                                </label><br>
+                                <label>
+                                    <input type="checkbox"
+                                           ng-disabled="!setting_strategy.air_humidity_config.enable_h_2 || !datas.temp"
+                                           ng-model="setting_strategy.air_humidity_config.enable_h_3"
+                                           name="enable_h_3"> 三级
+                                    <input type="text" class="form-control input_size" name="h_value_3"
+                                           ng-model="setting_strategy.air_humidity_config.h_value_3"
+                                           ng-disabled="!setting_strategy.air_humidity_config.h_value_2 || !datas.temp">&nbsp;&nbsp;%RH
+                                </label>
+                            </div>
+
+
+                            <label class="col-md-2 control-label text-right">空气低湿</label>
+
+                            <div class="col-md-4">
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.air_humidity_config.enable_l_1"
+                                           name="enable_l_1" ng-disabled="!datas.temp"> 一级
+                                    <input type="text" class="form-control input_size" ng-disabled="!datas.temp"
+                                           ng-model="setting_strategy.air_humidity_config.l_value_1" name="l_value_1">&nbsp;&nbsp;%RH
+                                </label><br>
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.air_humidity_config.enable_l_2"
+                                           ng-disabled="!setting_strategy.air_humidity_config.enable_l_1 || !datas.temp"
+                                           name="enable_l_2"> 二级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.air_humidity_config.l_value_2"
+                                           ng-disabled="!setting_strategy.air_humidity_config.l_value_1 || !datas.temp"
+                                           name="l_value_2">&nbsp;&nbsp;%RH
+                                </label><br>
+                                <label>
+                                    <input type="checkbox"
+                                           ng-disabled="!setting_strategy.air_humidity_config.enable_l_2 || !datas.temp"
+                                           ng-model="setting_strategy.air_humidity_config.enable_l_3"
+                                           name="enable_l_3"> 三级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.air_humidity_config.l_value_3"
+                                           ng-disabled="!setting_strategy.air_humidity_config.l_value_2 || !datas.temp"
+                                           name="l_value_3">&nbsp;&nbsp;%RH
+                                </label>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label text-right">co高浓度</label>
+
+                            <div class="col-md-4">
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.co_ppm_config.enable_h_1"
+                                           name="enable_h_1" ng-disabled="!datas.temp"> 一级
+                                    <input type="text" class="form-control input_size" ng-disabled="!datas.temp"
+                                           ng-model="setting_strategy.co_ppm_config.h_value_1" name="h_value_1">&nbsp;&nbsp;ppm
+                                </label>
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.co_ppm_config.enable_h_2"
+                                           ng-disabled="!setting_strategy.co_ppm_config.enable_h_1 || !datas.temp"
+                                           name="setting_strategy.enable_h_2"> 二级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.co_ppm_config.h_value_2"
+                                           ng-disabled="!setting_strategy.co_ppm_config.h_value_1 || !datas.temp"
+                                           name="h_value_2">&nbsp;&nbsp;ppm
+                                </label><br>
+                                <label>
+                                    <input type="checkbox"
+                                           ng-disabled="!setting_strategy.co_ppm_config.enable_h_2 || !datas.temp"
+                                           ng-model="setting_strategy.co_ppm_config.enable_h_3"
+                                           name="enable_h_3"> 三级
+                                    <input type="text" class="form-control input_size" name="h_value_3"
+                                           ng-model="setting_strategy.co_ppm_config.h_value_3"
+                                           ng-disabled="!setting_strategy.co_ppm_config.h_value_2 || !datas.temp">&nbsp;&nbsp;ppm
+                                </label>
+                            </div>
+
+
+                            <label class="col-md-2 control-label text-right">co低浓度</label>
+
+                            <div class="col-md-4">
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.co_ppm_config.enable_l_1"
+                                           name="enable_l_1" ng-disabled="!datas.temp"> 一级
+                                    <input type="text" class="form-control input_size" ng-disabled="!datas.temp"
+                                           ng-model="setting_strategy.co_ppm_config.l_value_1" name="l_value_1">&nbsp;&nbsp;ppm
+                                </label><br>
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.co_ppm_config.enable_l_2"
+                                           ng-disabled="!setting_strategy.co_ppm_config.enable_l_1 || !datas.temp"
+                                           name="enable_l_2"> 二级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.co_ppm_config.l_value_2"
+                                           ng-disabled="!setting_strategy.co_ppm_config.l_value_1 || !datas.temp"
+                                           name="l_value_2">&nbsp;&nbsp;ppm
+                                </label><br>
+                                <label>
+                                    <input type="checkbox"
+                                           ng-disabled="!setting_strategy.co_ppm_config.enable_l_2 || !datas.temp"
+                                           ng-model="setting_strategy.co_ppm_config.enable_l_3"
+                                           name="enable_l_3"> 三级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.co_ppm_config.l_value_3"
+                                           ng-disabled="!setting_strategy.co_ppm_config.l_value_2 || !datas.temp"
+                                           name="l_value_3">&nbsp;&nbsp;ppm
+                                </label>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label text-right">co2高浓度</label>
+
+                            <div class="col-md-4">
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.co2_ppm_config  .enable_h_1"
+                                           name="enable_h_1" ng-disabled="!datas.temp"> 一级
+                                    <input type="text" class="form-control input_size" ng-disabled="!datas.temp"
+                                           ng-model="setting_strategy.co2_ppm_config  .h_value_1" name="h_value_1">&nbsp;&nbsp;ppm
+                                </label>
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.co2_ppm_config  .enable_h_2"
+                                           ng-disabled="!setting_strategy.co2_ppm_config  .enable_h_1 || !datas.temp"
+                                           name="setting_strategy.enable_h_2"> 二级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.co2_ppm_config  .h_value_2"
+                                           ng-disabled="!setting_strategy.co2_ppm_config  .h_value_1 || !datas.temp"
+                                           name="h_value_2">&nbsp;&nbsp;ppm
+                                </label><br>
+                                <label>
+                                    <input type="checkbox"
+                                           ng-disabled="!setting_strategy.co2_ppm_config  .enable_h_2 || !datas.temp"
+                                           ng-model="setting_strategy.co2_ppm_config  .enable_h_3"
+                                           name="enable_h_3"> 三级
+                                    <input type="text" class="form-control input_size" name="h_value_3"
+                                           ng-model="setting_strategy.co2_ppm_config  .h_value_3"
+                                           ng-disabled="!setting_strategy.co2_ppm_config  .h_value_2 || !datas.temp">&nbsp;&nbsp;ppm
+                                </label>
+                            </div>
+
+
+                            <label class="col-md-2 control-label text-right">co2低浓度</label>
+
+                            <div class="col-md-4">
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.co2_ppm_config  .enable_l_1"
+                                           name="enable_l_1" ng-disabled="!datas.temp"> 一级
+                                    <input type="text" class="form-control input_size" ng-disabled="!datas.temp"
+                                           ng-model="setting_strategy.co2_ppm_config  .l_value_1" name="l_value_1">&nbsp;&nbsp;ppm
+                                </label><br>
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.co2_ppm_config  .enable_l_2"
+                                           ng-disabled="!setting_strategy.co2_ppm_config  .enable_l_1 || !datas.temp"
+                                           name="enable_l_2"> 二级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.co2_ppm_config  .l_value_2"
+                                           ng-disabled="!setting_strategy.co2_ppm_config  .l_value_1 || !datas.temp"
+                                           name="l_value_2">&nbsp;&nbsp;ppm
+                                </label><br>
+                                <label>
+                                    <input type="checkbox"
+                                           ng-disabled="!setting_strategy.co2_ppm_config  .enable_l_2 || !datas.temp"
+                                           ng-model="setting_strategy.co2_ppm_config  .enable_l_3"
+                                           name="enable_l_3"> 三级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.co2_ppm_config  .l_value_3"
+                                           ng-disabled="!setting_strategy.co2_ppm_config  .l_value_2 || !datas.temp"
+                                           name="l_value_3">&nbsp;&nbsp;ppm
+                                </label>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label text-right">高光照</label>
+
+                            <div class="col-md-4">
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.lux_config.enable_h_1"
+                                           name="enable_h_1" ng-disabled="!datas.temp"> 一级
+                                    <input type="text" class="form-control input_size" ng-disabled="!datas.temp"
+                                           ng-model="setting_strategy.lux_config.h_value_1" name="h_value_1">&nbsp;&nbsp;Lux
+                                </label>
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.lux_config.enable_h_2"
+                                           ng-disabled="!setting_strategy.lux_config.enable_h_1 || !datas.temp"
+                                           name="setting_strategy.enable_h_2"> 二级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.lux_config.h_value_2"
+                                           ng-disabled="!setting_strategy.lux_config.h_value_1 || !datas.temp"
+                                           name="h_value_2">&nbsp;&nbsp;Lux
+                                </label><br>
+                                <label>
+                                    <input type="checkbox"
+                                           ng-disabled="!setting_strategy.lux_config.enable_h_2 || !datas.temp"
+                                           ng-model="setting_strategy.lux_config.enable_h_3"
+                                           name="enable_h_3"> 三级
+                                    <input type="text" class="form-control input_size" name="h_value_3"
+                                           ng-model="setting_strategy.lux_config.h_value_3"
+                                           ng-disabled="!setting_strategy.lux_config.h_value_2 || !datas.temp">&nbsp;&nbsp;Lux
+                                </label>
+                            </div>
+
+
+                            <label class="col-md-2 control-label text-right">低光照</label>
+
+                            <div class="col-md-4">
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.lux_config.enable_l_1"
+                                           name="enable_l_1" ng-disabled="!datas.temp"> 一级
+                                    <input type="text" class="form-control input_size" ng-disabled="!datas.temp"
+                                           ng-model="setting_strategy.lux_config.l_value_1" name="l_value_1">&nbsp;&nbsp;Lux
+                                </label><br>
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.lux_config.enable_l_2"
+                                           ng-disabled="!setting_strategy.lux_config.enable_l_1 || !datas.temp"
+                                           name="enable_l_2"> 二级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.lux_config.l_value_2"
+                                           ng-disabled="!setting_strategy.lux_config.l_value_1 || !datas.temp"
+                                           name="l_value_2">&nbsp;&nbsp;Lux
+                                </label><br>
+                                <label>
+                                    <input type="checkbox"
+                                           ng-disabled="!setting_strategy.lux_config.enable_l_2 || !datas.temp"
+                                           ng-model="setting_strategy.lux_config.enable_l_3"
+                                           name="enable_l_3"> 三级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.lux_config.l_value_3"
+                                           ng-disabled="!setting_strategy.lux_config.l_value_2 || !datas.temp"
+                                           name="l_value_3">&nbsp;&nbsp;Lux
+                                </label>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label text-right">土壤高温</label>
+
+                            <div class="col-md-4">
+                                <label>
+                                    <input type="checkbox"
+                                           ng-model="setting_strategy.soil_temperature_config.enable_h_1"
+                                           name="enable_h_1" ng-disabled="!datas.temp" disabled> 一级
+                                    <input type="text" class="form-control input_size" ng-disabled="!datas.temp"
+                                           ng-model="setting_strategy.soil_temperature_config.h_value_1"
+                                           name="h_value_1" disabled>&nbsp;&nbsp;°C
+                                </label>
+                                <label>
+                                    <input type="checkbox"
+                                           ng-model="setting_strategy.soil_temperature_config.enable_h_2"
+                                           ng-disabled="!setting_strategy.soil_temperature_config.enable_h_1 || !datas.temp"
+                                           name="setting_strategy.enable_h_2"> 二级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.soil_temperature_config.h_value_2"
+                                           ng-disabled="!setting_strategy.soil_temperature_config.h_value_1 || !datas.temp"
+                                           name="h_value_2">&nbsp;&nbsp;°C
+                                </label><br>
+                                <label>
+                                    <input type="checkbox"
+                                           ng-disabled="!setting_strategy.soil_temperature_config.enable_h_2 || !datas.temp"
+                                           ng-model="setting_strategy.soil_temperature_config.enable_h_3"
+                                           name="enable_h_3"> 三级
+                                    <input type="text" class="form-control input_size" name="h_value_3"
+                                           ng-model="setting_strategy.soil_temperature_config.h_value_3"
+                                           ng-disabled="!setting_strategy.soil_temperature_config.h_value_2 || !datas.temp">&nbsp;&nbsp;°C
+                                </label>
+                            </div>
+
+
+                            <label class="col-md-2 control-label text-right">土壤低温</label>
+
+                            <div class="col-md-4">
+                                <label>
+                                    <input type="checkbox"
+                                           ng-model="setting_strategy.soil_temperature_config.enable_l_1"
+                                           name="enable_l_1" ng-disabled="!datas.temp" > 一级
+                                    <input type="text" class="form-control input_size" ng-disabled="!datas.temp"
+                                           ng-model="setting_strategy.soil_temperature_config.l_value_1"
+                                           name="l_value_1">&nbsp;&nbsp;°C
+                                </label><br>
+                                <label>
+                                    <input type="checkbox"
+                                           ng-model="setting_strategy.soil_temperature_config.enable_l_2"
+                                           ng-disabled="!setting_strategy.soil_temperature_config.enable_l_1 || !datas.temp"
+                                           name="enable_l_2"> 二级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.soil_temperature_config.l_value_2"
+                                           ng-disabled="!setting_strategy.soil_temperature_config.l_value_1 || !datas.temp"
+                                           name="l_value_2">&nbsp;&nbsp;°C
+                                </label><br>
+                                <label>
+                                    <input type="checkbox"
+                                           ng-disabled="!setting_strategy.soil_temperature_config.enable_l_2 || !datas.temp"
+                                           ng-model="setting_strategy.soil_temperature_config.enable_l_3"
+                                           name="enable_l_3"> 三级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.soil_temperature_config.l_value_3"
+                                           ng-disabled="!setting_strategy.soil_temperature_config.l_value_2 || !datas.temp"
+                                           name="l_value_3">&nbsp;&nbsp;°C
+                                </label>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label text-right">土壤高湿</label>
+
+                            <div class="col-md-4">
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.soil_humidity_config.enable_h_1"
+                                           name="enable_h_1" ng-disabled="!datas.temp"> 一级
+                                    <input type="text" class="form-control input_size" ng-disabled="!datas.temp"
+                                           ng-model="setting_strategy.soil_humidity_config.h_value_1" name="h_value_1">&nbsp;&nbsp;°C
+                                </label>
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.soil_humidity_config.enable_h_2"
+                                           ng-disabled="!setting_strategy.soil_humidity_config.enable_h_1 || !datas.temp"
+                                           name="setting_strategy.enable_h_2"> 二级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.soil_humidity_config.h_value_2"
+                                           ng-disabled="!setting_strategy.soil_humidity_config.h_value_1 || !datas.temp"
+                                           name="h_value_2">&nbsp;&nbsp;°C
+                                </label><br>
+                                <label>
+                                    <input type="checkbox"
+                                           ng-disabled="!setting_strategy.soil_humidity_config.enable_h_2 || !datas.temp"
+                                           ng-model="setting_strategy.soil_humidity_config.enable_h_3"
+                                           name="enable_h_3"> 三级
+                                    <input type="text" class="form-control input_size" name="h_value_3"
+                                           ng-model="setting_strategy.soil_humidity_config.h_value_3"
+                                           ng-disabled="!setting_strategy.soil_humidity_config.h_value_2 || !datas.temp">&nbsp;&nbsp;°C
+                                </label>
+                            </div>
+
+
+                            <label class="col-md-2 control-label text-right">土壤低湿</label>
+
+                            <div class="col-md-4">
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.soil_humidity_config.enable_l_1"
+                                           name="enable_l_1" ng-disabled="!datas.temp"> 一级
+                                    <input type="text" class="form-control input_size" ng-disabled="!datas.temp"
+                                           ng-model="setting_strategy.soil_humidity_config.l_value_1" name="l_value_1">&nbsp;&nbsp;°C
+                                </label><br>
+                                <label>
+                                    <input type="checkbox" ng-model="setting_strategy.soil_humidity_config.enable_l_2"
+                                           ng-disabled="!setting_strategy.soil_humidity_config.enable_l_1 || !datas.temp"
+                                           name="enable_l_2"> 二级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.soil_humidity_config.l_value_2"
+                                           ng-disabled="!setting_strategy.soil_humidity_config.l_value_1 || !datas.temp"
+                                           name="l_value_2">&nbsp;&nbsp;°C
+                                </label><br>
+                                <label>
+                                    <input type="checkbox"
+                                           ng-disabled="!setting_strategy.soil_humidity_config.enable_l_2 || !datas.temp"
+                                           ng-model="setting_strategy.soil_humidity_config.enable_l_3"
+                                           name="enable_l_3"> 三级
+                                    <input type="text" class="form-control input_size"
+                                           ng-model="setting_strategy.soil_humidity_config.l_value_3"
+                                           ng-disabled="!setting_strategy.soil_humidity_config.l_value_2 || !datas.temp"
+                                           name="l_value_3">&nbsp;&nbsp;°C
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default"
+                                data-dismiss="modal" ng-click="setting_custom(datas.temp)">确认
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal -->
+</div>

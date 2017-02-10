@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>联点数据</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--<link rel="stylesheet" href="assets/plugins/login/login_page.css"/>-->
+    <link rel="stylesheet" href="assets/plugins/login/toastmessage/jquery.toastmessage.css">
+    <link rel="stylesheet" href="assets/plugins/login/login.css">
+
+    <style>
+        /* .mt10 {
+             margin-top: 10px;
+         }
+
+         .br20 {
+             border-radius: 20px;
+         }
+ */
+        /*.new-user {
+        / / height : 55 px;
+            position: relative;
+        }
+
+        .new-user .line {
+            position: absolute;
+            border-bottom: 1px solid rgb(157, 226, 195);
+            width: 300px;
+            top: 10%;
+            left: 25%;
+            cursor: pointer;
+        }*/
+
+        /*.back-btn {
+            display: none;
+            background-color: rgba(244, 244, 244, 0.6);
+            padding: 10px 110px;
+            border-radius: 20px;
+            text-decoration: none;
+            color: rgb(131, 194, 158);
+        }*/
+
+        .error{
+            margin: 200px auto;
+            color: #666;
+            font-size: 18px;
+            text-align: center;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="container reset">
+
+        <% if ( varify == true) { %>
+        <form class="form reset-form">
+
+            <h4 id="email" ><%= user.email %></h4>
+            <dl>
+                <dt>新密码 :&nbsp;</dt>
+                <dd>
+                    <input class="passwd-input" type="password">
+                </dd>
+            </dl>
+            <dl>
+                <dt>再次确认 :&nbsp;</dt>
+                <dd>
+                    <input class="passwd2-input" type="password"/>
+                </dd>
+            </dl>
+
+            <button type="button" id="reset-btn">确认修改</button>
+
+        </form>
+
+        <form class="form retSuccess">
+            <h4>用户信息</h4>
+            <dl>
+                <dt>用户名 :&nbsp;</dt>
+                <dd>
+                    <span class="reset_username"></span>
+                </dd>
+            </dl>
+            <dl>
+                <dt>电&nbsp;&nbsp;&nbsp;&nbsp;话 :&nbsp;</dt>
+                <dd>
+                    <span class="reset_phone"></span>
+                </dd>
+            </dl>
+            <dl>
+                <dt>邮&nbsp;&nbsp;&nbsp;&nbsp;箱 :&nbsp;</dt>
+                <dd>
+                    <span class="reset_email"></span>
+                </dd>
+            </dl>
+
+            <a href="/" id="return_login">返回登录</a>
+        </form>
+
+        <% } else { %>
+
+        <div class="error">
+            <h2 style="margin-bottom: 16px">token不合法</h2>
+
+            <h3>请确保你填写了正确的电子邮件地址</h3>
+        </div>
+
+        <% } %>
+
+    </div>
+
+</div>
+<!--wrapper-->
+
+<script>window.jQuery || document.write('<script src="../bower_components/jquery/dist/jquery.min.js"><\/script>')</script>
+<script src="assets/plugins/login/toastmessage/jquery.toastmessage.js"></script>
+<script src="../bower_components/is_js/is.min.js"></script>
+
+<!-- <script src="assets/plugins/login/login.js"></script> -->
+<script>
+    $(".reset-form").submit(function (e) {
+        return false;
+    });
+
+    //toastmessage插件弹出信息提示
+    var alertError = function (msg) {
+        $().toastmessage('showToast', {position: "top-center", text: msg, type: "error"});
+    };
+    var alertSuccess = function (msg) {
+        $().toastmessage('showToast', {position: "top-center", text: msg, type: "success"});
+    };
+
+    var alertWarning = function (msg) {
+        $().toastmessage('showToast', {position: "top-center", text: msg, type: "warning"});
+    };
+
+    $("#reset-btn").click(function () {
+        var ps1 = $(".passwd-input").val();
+        var ps2 = $(".passwd2-input").val();
+        var token = window.location.search.split("?token=")[1];
+
+        if (is.empty(ps1) || is.empty(ps2)) {
+            alertWarning("密码不能为空.");
+            return false;
+        }
+        if (ps1.length < 6) {
+            alertWarning("密码长度不能小于6位");
+            return false;
+        }
+
+        if (ps1 != ps2) {
+            alertWarning("两次密码不一致.");
+            return false;
+        }
+
+        console.log("修改中： " + email);
+
+        $.post("/api/users/passwords", {token: token, ps1: ps1, ps2: ps2}, function (data) {
+
+            if (data.result == "OK") {
+                alertSuccess("密码修改成功");
+                $('.reset-form').hide();
+                $(".reset_username").text(data.msg.username);
+                $(".reset_phone").text(data.msg.phone);
+                $(".reset_email").text(data.msg.email);
+                $('.retSuccess').show();
+            } else {
+                alertError(data.msg);
+            }
+        });
+
+    });
+
+</script>
+</body>
+</html>

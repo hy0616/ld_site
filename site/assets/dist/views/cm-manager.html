@@ -1,0 +1,285 @@
+
+<div class="container" ng-controller="ManagerController">
+
+<div ng-include="'views/templates/remote-sidebar.html'"></div>
+<div ng-include="'views/templates/settings-sidebar.html'"></div>
+
+<div class="row">
+<div class="col-xs-12">
+
+<tabset panel-tabs="true" panel-class="panel-inverse">
+
+
+<tab active="showTasksTab" select="clickOnTab('unregisted')">
+  <tab-heading>
+    <i class="fa fa-tasks"></i> 设备分组 <span class="badge badge-primary">{{devList.length}}</span>
+  </tab-heading>
+  <div>
+    <form class="form-horizontal" name="create_task"
+          ng-submit="newItem(newTaskTitle, newTaskLabelText, newTaskColor)" ng-show="showForm">
+      <div class="form-group">
+        <div class="col-lg-8 col-md-7 col-sm-6 col-xs-5">
+          <input type="text" class="form-control no-validate" ng-model="newTaskTitle"
+                 placeholder="Task title..." ng-keyup="cancelAdd($event)">
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5">
+          <div class="input-group">
+            <input type="text" class="form-control no-validate" ng-model="newTaskLabelText"
+                   placeholder="Task label..." ng-keyup="cancelAdd($event)">
+
+            <div class="input-group-btn">
+              <div class="btn-group" dropdown style="">
+                <button type="button" class="btn btn-default dropdown-toggle">
+                  <div class="label label-{{newTaskColor || 'primary'}} color-block"></div>
+                </button>
+                <ul class="dropdown-menu dropdown-colors" role="menu">
+                  <li><span class="label label-success" ng-click="newTaskColor='success'"></span></li>
+                  <li><span class="label label-primary" ng-click="newTaskColor='primary'"></span></li>
+                  <li><span class="label label-warning" ng-click="newTaskColor='warning'"></span></li>
+                  <li><span class="label label-danger" ng-click="newTaskColor='danger'"></span></li>
+                  <li><span class="label label-info" ng-click="newTaskColor='info'"></span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2 col-lg-1">
+          <input
+            class="btn btn-success btn-block"
+            value="Add Task"
+            type="submit"
+            />
+        </div>
+      </div>
+
+    </form>
+
+
+  </div>
+
+  <div class="tasklist" style="height:500px">
+
+    <div style="margin-bottom:5px;padding-bottom:5px;border-bottom:1px solid rgb(249, 249, 249);">
+      <button class="btn btn-default btn-xs"
+              ng-class="{'button-active-blue': multiSelect}"
+              ng-click="toggleMultiSelect()">
+        <i class="fa fa-pencil"></i>&nbsp;批量操作
+      </button>
+
+    </div>
+
+    <ol ng-model="tasks" class="panel-tasks" style="overflow: scroll;height: 460px;">
+
+      <li ng-show="multiSelect"
+          style="border:1px solid rgb(255, 189, 115) !important;background-color: rgb(255, 255, 192); padding-right:17px !important">
+        选中 <span class="text-success">{{devListSelected.length}}</span> 个设备
+        <div class="btn-group" data-dropdown>
+          <button ng-repeat="group in devListSelectedGroup"
+                  class="btn btn-default btn-xs"
+                  ng-style="{backgroundColor: group.color}"
+                  style="margin-right: 5px; color:#fff;border-radius: 3px">
+            {{group.name}}<span ng-click="removeSelectedGroup(group.name)">&nbsp;X</span>
+          </button>
+
+          <button class="btn btn-default btn-xs dropdown-toggle">
+            <i class="fa fa-plus"></i>&nbsp;
+          <span ng-show="devListSelectedGroup.length >= 1">
+            继续添加
+          </span>
+
+          <span ng-show="devListSelectedGroup.length == 0">
+            添加分组
+          </span>
+
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li ng-repeat="group in groups"
+                ng-style="{backgroundColor:group.color}"
+                ng-click="addGroupSelected(group.name,group.color)"
+                class="select-group hand">
+              <i class="fa fa-tag"></i>&nbsp;
+              <span>{{group.name}}</span>
+            </li>
+          </ul>
+        </div>
+
+        <button ng-click="addMultiSelectGroupCancel()" class="pull-right btn btn-default btn-xs">取消</button>
+        <button ng-click="addMultiSelectGroupConfirmed()" class="pull-right btn btn-success btn-xs">确认</button>
+      </li>
+
+      <li ng-repeat="dev in devList">
+        <!--<i ng-show="multiSelect" class="fa fa-square-o"></i>&nbsp;-->
+        <i class="fa fa-square-o"
+           ng-show="multiSelect"
+           ng-click="toggleDevSelect(dev.dev_uuid)"
+           ng-class='{"fa-check-square": selectDevPool[dev.dev_uuid]}'>
+
+          <!--ng-class="{'fa fa-check-square-o': inDevSelected(dev.uuid), 'fa fa-square-o': inDevSelected(dev.uuid)}"-->
+        </i>&nbsp;
+
+        <i class="fa fa-circle" style="color:rgb(159, 228, 159)"></i>&nbsp;
+
+        <span ng-class="{'highlight': dev.dev_uuid == curUUID}"
+              ng-click="openSettingCtrlSideBar(dev.dev_uuid)"
+              class="task-description hand">{{dev.common.devname}} {{dev.dev_uuid}}
+        </span>
+
+        <div class="btn-group" data-dropdown>
+          <button ng-repeat="group in dev.groups"
+                  class="btn btn-default btn-xs"
+                  ng-style="{backgroundColor: group.color}"
+                  style="margin-right: 5px; color:#fff;border-radius: 3px">
+            {{group.name}}
+          </button>
+
+          <span ng-show="dev.groups.length == 0"
+                class="btn btn-default btn-xs"
+                style="background-color: grey; margin-right: 5px; color:#fff;border-radius: 3px">
+            未注册
+          </span>
+
+          <!--<button ng-hide="multiSelect" class="btn btn-default btn-xs dropdown-toggle">-->
+          <!--<i class="fa fa-plus"></i>&nbsp;添加分组-->
+          <!--</button>-->
+          <!--<ul class="dropdown-menu" role="menu">-->
+          <!--<li ng-repeat="group in groups"-->
+          <!--ng-style="{backgroundColor: group.color}"-->
+          <!--ng-click="$parent.addGroupPreview(dev.dev_uuid, group.name,group.color)"-->
+          <!--class="select-group hand">-->
+          <!--<i class="fa fa-tag"></i>&nbsp;-->
+          <!--<span>{{group.name}}</span>-->
+          <!--</li>-->
+          <!--</ul>-->
+
+        </div>
+
+        <div class="options todooptions">
+          <div class="btn-group">
+
+            <!--<button ng-hide="multiSelect" class="btn btn-default btn-xs" ng-click="complete(dev)">-->
+              <!--<i class="fa fa-fw fa-check"></i>确认-->
+            <!--</button>-->
+            <!--<button class="btn btn-default btn-xs" ng-click="openRemoteCtrlSideBar(dev.dev_uuid)">-->
+              <!--<i class="fa fa-fw fa-wrench"></i>{{"REMOTE_CTRL" | translate}}-->
+            <!--</button>-->
+
+            <button class="btn btn-default btn-xs" ng-click="openSettingCtrlSideBar(dev.dev_uuid)">
+              <i class="fa fa-fw fa-edit"></i>{{"EDIT" | translate}}
+            </button>
+          </div>
+        </div>
+      </li>
+
+    </ol>
+  </div>
+
+</tab>
+
+<tab active="showCompletedTab" select="clickOnTab('registed')">
+  <tab-heading>
+    <i class="fa fa-tasks"></i> 已分组 <span class="badge badge-success">{{devAlreadyGrouped.length}}</span>
+  </tab-heading>
+  <div class="tasklist" style="height:500px">
+    <ol class="panel-tasks">
+
+      <div class="row" style="margin-left:10px">
+
+        <span class="bold hand btn btn-default btn-sm"
+              ng-click="showByGroup('all')">全部分组
+        </span>
+
+        <span ng-repeat="group in groups" class="" style="margin-right:10px;">
+          <span class="bold btn btn-default btn-sm"
+                style="border-radius:3px;color:#fff;"
+                ng-style="{backgroundColor:group.color}">
+            <span class="hand" ng-click="showByGroup(group.name)">{{group.name}}</span>
+            <!--<span ng-click="deleteGroup(group.name)"> x</span>-->
+          </span>
+
+        </span>
+
+        <span class="btn btn-default btn-sm" ng-click="openGroupArea()">
+          <i class="fa fa-plus"></i>&nbsp;添加分组
+        </span>
+      </div>
+
+      <form collapse="!addGroupArea" class="form-horizontal" name="create_task"
+            ng-submit="addGroup(newGroupNameModel)">
+        <div class="form-group">
+          <hr>
+          <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5">
+            <div class="input-group">
+              <input type="text" class="form-control no-validate" ng-model="newGroupNameModel"
+                     placeholder="组名称">
+
+              <div class="input-group-btn">
+                <div class="btn-group" dropdown style="">
+                  <button type="button" class="btn btn-default dropdown-toggle">
+                    <div class="color-block"><i ng-style="{color:selectGroupItemColor}" class="fa fa-tags"></i>&nbsp;
+                    </div>
+                  </button>
+                  <ul class="dropdown-menu dropdown-colors" role="menu">
+                    <li ng-repeat="(name,rgb) in colorPool"
+                        ng-click="addGroupTag(name,rgb)"
+                        class="select-group hand"
+                        ng-style="{backgroundColor:rgb}">
+                      <i class="fa fa-tag"></i>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2 col-lg-1">
+            <input class="btn btn-success btn-block" value="确认添加" type="submit"/>
+          </div>
+          <div class="col-md-2 col-lg-1">
+            <span class="btn btn-default" ng-click="hideGroupArea()">取 消</span>
+          </div>
+
+        </div>
+
+      </form>
+
+      <br>
+      <li ng-repeat="item in devAlreadyGrouped">
+        <label style="width:80%;">
+
+          <span ng-class="{'highlight': item.dev_uuid == curUUID}"
+                ng-click="openSettingCtrlSideBar(item.dev_uuid)"
+                class="task-description"><i class="fa fa-hdd-o"></i>&nbsp; {{item.dev_uuid}}
+          </span>
+
+          <span ng-repeat="group in item.groups"
+                class="bold white"
+                style="padding:2px 4px;border-radius:3px;margin-right:5px;"
+                ng-mouseenter="curLabel=(item.dev_uuid+group)"
+                ng-mouseleave="curLabel=false"
+                ng-style="{backgroundColor:group['color']}">
+            {{group.name}}
+            <span ng-show="item.dev_uuid+group == curLabel"
+                  ng-click="removeDevGroupItem(item.dev_uuid, group)"> X
+            </span>
+          </span>
+        </label>
+
+        <div class="options todooptions">
+          <!--<button class="btn btn-default btn-xs" ng-click="openRemoteCtrlSideBar(item.dev_uuid)">-->
+          <!--<i class="fa fa-fw fa-wrench"></i>{{"REMOTE_CTRL" | translate}}-->
+          <!--</button>-->
+          <button class="btn btn-default btn-xs" ng-click="openSettingCtrlSideBar(item.dev_uuid)">
+            <i class="fa fa-fw fa-edit"></i>{{"EDIT" | translate}}
+          </button>
+        </div>
+      </li>
+    </ol>
+  </div>
+</tab>
+
+
+</tabset>
+
+</div>
+</div>
+
+</div> <!-- container -->

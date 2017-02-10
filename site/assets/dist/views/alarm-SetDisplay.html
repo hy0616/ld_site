@@ -1,0 +1,291 @@
+<div ng-controller="AlarmSetDisplay" style="width: 86%;float: left">
+    <div class="row" style="margin-top: 25px;text-align: center;color: #656B79;">
+        <div class="col-md-5">
+            <table class="table">
+                <tr>
+                    <td>设备sn</td>
+                    <td>大棚名称</td>
+                    <td>主要作物</td>
+                    <td>大棚面积</td>
+                    <td>报警详情</td>
+                    <td>报警门限设置</td>
+                </tr>
+                <tr ng-repeat="dev in UserDev.smartgates">
+                    <td>{{dev.smartgate.sn}}</td>
+                    <td>{{dev.smartgate.dev_name}}</td>
+                    <td>{{dev.smartgate.plant_name}}</td>
+                    <td>{{dev.smartgate.area}}</td>
+                    <td><a ng-click="getSmartgate(dev)">详情</a></td>
+                    <td>
+                        <div ng-include="'views/alarm-setting.html'"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="clo-md-4"></div>
+    </div>
+
+
+    <div class="panel-body" style="background-color: #f8f8f8;overflow: auto;zoom: 1">
+
+        <div ng-show="alarm.list.result == 'Failed'" style="text-align: center;font-size:large;font-weight: bold;">
+            <span>未设置报警权限</span>
+        </div>
+
+        <div class="div-frame"
+             ng-show="alarm.list.strategy.charge_config.enable_l_1">
+            <strong>电量报警门限</strong>
+            <br>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">低电量</label>
+                <label>
+                    <p ng-show="alarm.list.strategy.charge_config.enable_l_1">
+                        一级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.charge_config.l_value_1}}
+                        °C</p>
+
+                    <p ng-show="alarm.list.strategy.charge_config.enable_l_2">
+                        二级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.charge_config.l_value_2}}
+                        °C</p>
+                </label>
+            </div>
+        </div>
+
+        <div class="div-frame"
+             ng-show="alarm.list.strategy.air_temperature_config.enable_h_1 || alarm.list.strategy.air_temperature_config.enable_l_1">
+            <strong>空气温度报警门限</strong>
+            <br>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">空气高温</label>
+                <label>
+                    <p ng-show="alarm.list.strategy.air_temperature_config.enable_h_1">
+                        一级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.air_temperature_config.h_value_1}}
+                        °C</p>
+
+                    <p ng-show="alarm.list.strategy.air_temperature_config.enable_h_2">
+                        二级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.air_temperature_config.h_value_2}}
+                        °C</p>
+
+                    <p ng-show="alarm.list.strategy.air_temperature_config.enable_h_3">
+                        三级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.air_temperature_config.h_value_3}}
+                        °C</p>
+                </label>
+                <br>
+                <label class="col-sm-2 control-label">空气低温</label>
+                <label>
+                    <p ng-show="alarm.list.strategy.air_temperature_config.enable_l_1">
+                        一级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.air_temperature_config.l_value_1}}
+                        °C</p>
+
+                    <p ng-show="alarm.list.strategy.air_temperature_config.enable_l_2">
+                        二级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.air_temperature_config.l_value_2}}
+                        °C</p>
+
+                    <p ng-show="alarm.list.strategy.air_temperature_config.enable_l_3">
+                        三级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.air_temperature_config.l_value_3}}
+                        °C</p>
+                </label>
+            </div>
+        </div>
+
+        <div class="div-frame"
+             ng-show="alarm.list.strategy.air_humidity_config.enable_h_1 || alarm.list.strategy.air_humidity_config.enable_l_1">
+            <strong>空气湿度报警门限</strong>
+            <br>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">空气高湿</label>
+                <label>
+                    <p ng-show="alarm.list.strategy.air_humidity_config.enable_h_1">一级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.air_humidity_config.h_value_1}}
+                        %HR</p>
+
+                    <p ng-show="alarm.list.strategy.air_humidity_config.enable_h_2">二级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.air_humidity_config.h_value_2}}
+                        %HR</p>
+
+                    <p ng-show="alarm.list.strategy.air_humidity_config.enable_h_3">三级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.air_humidity_config.h_value_3}}
+                        %HR</p>
+                </label>
+                <br>
+                <label class="col-sm-2 control-label">空气低湿</label>
+                <label>
+                    <p ng-show="alarm.list.strategy.air_humidity_config.enable_l_1">一级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.air_humidity_config.l_value_1}}
+                        %HR</p>
+
+                    <p ng-show="alarm.list.strategy.air_humidity_config.enable_l_2">二级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.air_humidity_config.l_value_2}}
+                        %HR</p>
+
+                    <p ng-show="alarm.list.strategy.air_humidity_config.enable_l_3">三级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.air_humidity_config.l_value_3}}
+                        %HR</p>
+                </label>
+            </div>
+        </div>
+
+        <div class="div-frame"
+             ng-show="alarm.list.strategy.co_ppm_config.enable_h_1 || alarm.list.strategy.co_ppm_config.enable_l_1">
+            <strong>co报警门限</strong>
+            <br>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">co高浓度</label>
+                <label>
+                    <p ng-show="alarm.list.strategy.co_ppm_config.enable_h_1">一级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.co_ppm_config.h_value_1}}
+                        ppm</p>
+
+                    <p ng-show="alarm.list.strategy.co_ppm_config.enable_h_2">二级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.co_ppm_config.h_value_2}}
+                        ppm</p>
+
+                    <p ng-show="alarm.list.strategy.co_ppm_config.enable_h_3">三级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.co_ppm_config.h_value_3}}
+                        ppm</p>
+                </label>
+                <br>
+                <label class="col-sm-2 control-label">co低浓度</label>
+                <label>
+                    <p ng-show="alarm.list.strategy.co_ppm_config.enable_l_1">一级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.co_ppm_config.l_value_1}}
+                        ppm</p>
+
+                    <p ng-show="alarm.list.strategy.co_ppm_config.enable_l_2">二级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.co_ppm_config.l_value_2}}
+                        ppm</p>
+
+                    <p ng-show="alarm.list.strategy.co_ppm_config.enable_l_3">三级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.co_ppm_config.l_value_3}}
+                        ppm</p>
+                </label>
+            </div>
+        </div>
+
+        <div class="div-frame"
+             ng-show="alarm.list.strategy.co2_ppm_config.enable_h_1 || alarm.list.strategy.co2_ppm_config.enable_l_1">
+            <strong>co2报警门限</strong>
+            <br>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">co2高浓度</label>
+                <label>
+                    <p ng-show="alarm.list.strategy.co2_ppm_config.enable_h_1">一级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.co2_ppm_config.h_value_1}}
+                        ppm</p>
+
+                    <p ng-show="alarm.list.strategy.co2_ppm_config.enable_h_2">二级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.co2_ppm_config.h_value_2}}
+                        ppm</p>
+
+                    <p ng-show="alarm.list.strategy.co2_ppm_config.enable_h_3">三级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.co2_ppm_config.h_value_3}}
+                        ppm</p>
+                </label>
+                <br>
+                <label class="col-sm-2 control-label">co2低浓度</label>
+                <label>
+                    <p ng-show="alarm.list.strategy.co2_ppm_config.enable_l_1">一级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.co2_ppm_config.l_value_1}}
+                        ppm</p>
+
+                    <p ng-show="alarm.list.strategy.co2_ppm_config.enable_l_2">二级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.co2_ppm_config.l_value_2}}
+                        ppm</p>
+
+                    <p ng-show="alarm.list.strategy.co2_ppm_config.enable_l_3">三级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.co2_ppm_config.l_value_3}}
+                        ppm</p>
+                </label>
+            </div>
+        </div>
+
+        <div class="div-frame"
+             ng-show="alarm.list.strategy.soil_temperature_config.enable_h_1 || alarm.list.strategy.soil_temperature_config.enable_l_1">
+            <strong>土壤温度报警门限</strong>
+            <br>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">土壤高温</label>
+                <label>
+                    <p ng-show="alarm.list.strategy.soil_temperature_config.enable_h_1">
+                        一级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.soil_temperature_config.h_value_1}}
+                        °C</p>
+
+                    <p ng-show="alarm.list.strategy.soil_temperature_config.enable_h_2">
+                        二级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.soil_temperature_config.h_value_2}}
+                        °C</p>
+
+                    <p ng-show="alarm.list.strategy.soil_temperature_config.enable_h_3">
+                        三级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.soil_temperature_config.h_value_3}}
+                        °C</p>
+                </label>
+                <br>
+                <label class="col-sm-2 control-label">土壤低温</label>
+                <label>
+                    <p ng-show="alarm.list.strategy.soil_temperature_config.enable_l_1">
+                        一级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.soil_temperature_config.l_value_1}}
+                        °C</p>
+
+                    <p ng-show="alarm.list.strategy.soil_temperature_config.enable_l_2">
+                        二级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.soil_temperature_config.l_value_2}}
+                        °C</p>
+
+                    <p ng-show="alarm.list.strategy.soil_temperature_config.enable_l_3">
+                        三级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.soil_temperature_config.l_value_3}}
+                        °C</p>
+                </label>
+            </div>
+        </div>
+
+        <div class="div-frame"
+             ng-show="alarm.list.strategy.soil_humidity_config.enable_h_1 || alarm.list.strategy.soil_humidity_config.enable_l_1">
+            <strong>土壤湿度报警门限</strong>
+            <br>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">土壤高湿</label>
+                <label>
+                    <p ng-show="alarm.list.strategy.soil_humidity_config.enable_h_1">一级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.soil_humidity_config.h_value_1}}
+                        %HR</p>
+
+                    <p ng-show="alarm.list.strategy.soil_humidity_config.enable_h_2">二级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.soil_humidity_config.h_value_2}}
+                        %HR</p>
+
+                    <p ng-show="alarm.list.strategy.soil_humidity_config.enable_h_3">三级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.soil_humidity_config.h_value_3}}
+                        %HR</p>
+                </label>
+                <br>
+                <label class="col-sm-2 control-label">土壤低湿</label>
+                <label>
+                    <p ng-show="alarm.list.strategy.soil_humidity_config.enable_l_1">一级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.soil_humidity_config.l_value_1}}
+                        %HR</p>
+
+                    <p ng-show="alarm.list.strategy.soil_humidity_config.enable_l_2">二级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.soil_humidity_config.l_value_2}}
+                        %HR</p>
+
+                    <p ng-show="alarm.list.strategy.soil_humidity_config.enable_l_3">三级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.soil_humidity_config.l_value_3}}
+                        %HR</p>
+                </label>
+            </div>
+        </div>
+
+        <div class="div-frame"
+             ng-show="alarm.list.strategy.lux_config.enable_h_1 || alarm.list.strategy.lux_config.enable_l_1">
+            <strong>光照报警门限</strong>
+            <br>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">高光照</label>
+                <label>
+                    <p ng-show="alarm.list.strategy.lux_config.enable_h_1">一级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.lux_config.h_value_1}}
+                        Lux</p>
+
+                    <p ng-show="alarm.list.strategy.lux_config.enable_h_2">二级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.lux_config.h_value_2}}
+                        Lux</p>
+
+                    <p ng-show="alarm.list.strategy.lux_config.enable_h_3">三级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.lux_config.h_value_3}}
+                        Lux</p>
+                </label>
+                <br>
+                <label class="col-sm-2 control-label">低光照</label>
+                <label>
+                    <p ng-show="alarm.list.strategy.lux_config.enable_l_1">一级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.lux_config.l_value_1}}
+                        Lux</p>
+
+                    <p ng-show="alarm.list.strategy.lux_config.enable_l_2">二级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.lux_config.l_value_2}}
+                        Lux</p>
+
+                    <p ng-show="alarm.list.strategy.lux_config.enable_l_3">三级&nbsp;&nbsp;&nbsp;{{alarm.list.strategy.lux_config.l_value_3}}
+                        Lux</p>
+                </label>
+            </div>
+        </div>
+    </div>
+
+</div>

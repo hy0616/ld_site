@@ -1,0 +1,20 @@
+
+[ng-cloak] {
+  display: none;
+}
+
+.xx-small {
+    font-size:xx-small;
+}
+.x-small{
+    font-size:x-small;
+}
+
+.small {
+    font-size: small;
+}
+
+.hand {
+    cursor: pointer;
+}
+

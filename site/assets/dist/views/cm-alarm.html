@@ -1,0 +1,49 @@
+<div class="container" ng-controller="Alarm_View">
+    <div ng-controller="AlarmController">
+        <div class="col-md-12 ">
+            <div class="total">
+                <div class="leftbar" messages-view>
+                    <ul>
+                        <li ng-click="switchView('message_view1')">
+                            <img src="assets/img/levelMenu.png" alt="报警信息"/>
+                            报警信息
+                        </li>
+
+                        <ul>
+                            <li ng-click="switchView('message_view1');unread()"
+                                    ng-class="{'leftbar_li_active' : switch_view.message_view1}">
+                                <img src="assets/img/unread.png" alt="报警预览"/>
+                                未读信息
+                            </li>
+
+                            <li ng-click="switchView('message_view2');onread()"
+                                ng-class="{'leftbar_li_active' : switch_view.message_view2}">
+                                <img src="assets/img/onread.png" alt="报警预览"/>
+                                已读信息
+                            </li>
+                        </ul>
+
+                        <li ng-click="switchView('setting_view')" ng-class="{'leftbar_li_active' : switch_view.setting_view}">
+                            <img src="assets/img/levelMenu.png" alt="报警设置"/>
+                            报警设置
+                        </li>
+
+                        <li ng-click="switchView('reserve_view')" ng-class="{'leftbar_li_active' : switch_view.reserve_view}">
+                            <img src="assets/img/levelMenu.png" alt="预案设置"/>
+                            预案设置
+                        </li>
+
+                    </ul>
+                </div>
+
+                <div class="gridStyle" ng-show="switch_view.message_view1 || switch_view.message_view2" data-ng-grid="gridOptions"></div>
+
+                <div ng-show="switch_view.setting_view" ng-include="'views/alarm-SetDisplay.html'"></div>
+
+                <div ng-show="switch_view.reserve_view" ng-include="'views/alarm-custom.html'"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+
+    <script type="text/javascript" src="jquery.min.js"></script>
+
+
+</head>
+<body>
+
+<table>
+    <tr>
+        <td colspan="2" align="center"><h2>分配摄像头到用户</h2></td>
+    </tr>
+    <tr>
+        <td>用户名:</td>
+        <td><input type="text" name="username" id="username" value=""></td>
+    </tr>
+    <tr>
+        <td>设备序列号:</td>
+        <td><input type="text" name="deviceSerial" id="deviceSerial" value=""></td>
+    </tr>
+    <tr>
+        <td><input type="button" value="添加" onclick="addFunc()"/></td>
+        <td><input type="button" value="删除" onclick="deleteFunc()"/></td>
+    </tr>
+</table>
+<br><br>
+
+<table>
+    <tr>
+        <td colspan="2" align="center"><h2>分配直播地址到摄像头</h2></td>
+    </tr>
+    <tr>
+        <td>设备序列号：</td>
+        <td><input type="text" name="deviceSerialLive" id="deviceSerialLive" value=""></td>
+    </tr>
+    <tr>
+        <td>直播地址：</td>
+        <td><input type="text" name="cameraLiveUrl" id="cameraLiveUrl" value=""></td>
+    </tr>
+    <tr>
+        <td><input type="button" value="添加" onclick="addLiveUrlFunc()"/></td>
+        <td><input type="button" value="删除" onclick="deleteLiveUrlFunc()"/></td>
+    </tr>
+</table>
+
+<br><br><br>
+
+<h1>
+    <label id="result"></label><br>
+    <label id="msg"></label>
+</h1>
+
+<script type="text/javascript">
+    /**
+     * 给用户分配摄像头
+     */
+    function addFunc() {
+        $.ajax({
+            type: 'post',
+            url: '/api/users/cameras',
+            data: {
+                username: document.getElementById('username').value,
+                deviceSerial: document.getElementById('deviceSerial').value
+            },
+            async: true,
+            success: function (data) {
+                var responseMsg = eval("(" + data + ")");
+                var result = responseMsg.result;
+                var msg = responseMsg.msg;
+                assignValue(result, msg);
+            },
+            fail: function (data) {
+                assignValue('Error', data);
+            }
+        });
+    }
+
+    function deleteFunc() {
+        $.ajax({
+            type: 'delete',
+            url: '/api/users/cameras',
+            data: {
+                username: document.getElementById('username').value,
+                deviceSerial: document.getElementById('deviceSerial').value
+            },
+            async: true,
+            success: function (data) {
+                var responseMsg = eval("(" + data + ")");
+                var result = responseMsg.result;
+                var msg = responseMsg.msg;
+                assignValue(result, msg);
+            },
+            fail: function (data) {
+                assignValue('Error', data);
+            }
+        });
+    }
+
+    /**
+     * 为摄像头分配直播地址
+     */
+    function addLiveUrlFunc() {
+        $.ajax({
+            type: 'post',
+            url: '/api/cameras/liveurls',
+            data: {
+                deviceSerial: document.getElementById('deviceSerialLive').value,
+                liveurl: document.getElementById('cameraLiveUrl').value
+            },
+            async: true,
+            success: function (data) {
+                var responseMsg = eval("(" + data + ")");
+                var result = responseMsg.result;
+                var msg = responseMsg.msg;
+                assignValue(result, msg);
+            },
+            fail: function (data) {
+                assignValue('Error', data);
+            }
+        })
+    }
+
+    function deleteLiveUrlFunc() {
+        $.ajax({
+            type:'delete',
+            url:'/api/cameras/liveurls',
+            data: {
+                deviceSerial: document.getElementById('deviceSerialLive').value,
+                liveurl: document.getElementById('cameraLiveUrl').value
+            },
+            async: true,
+            success: function (data) {
+                var responseMsg = eval("(" + data + ")");
+                var result = responseMsg.result;
+                var msg = responseMsg.msg;
+                assignValue(result, msg);
+            },
+            fail: function (data) {
+                assignValue('Error', data);
+            }
+        })
+    }
+
+    function assignValue(result, msg) {
+        document.getElementById('result').innerText = result;
+        document.getElementById('msg').innerText = msg;
+    }
+
+</script>
+
+</body>
+</html>
+</body>
+</html>

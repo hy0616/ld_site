@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>联点数据智慧云平台</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta property="qc:admins" content="5701516423475461561167414163757">
+
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../bower_components/jquery/dist/jquery.min.js"><\/script>')</script>
+    <script src="assets/plugins/login/simple_storage.js"></script>
+    <script>
+
+        if ($.localStorage('yy.token')) {
+            window.location = "/main"
+        }
+
+        //$.localStorage('yy.token') ? window.location = "/main" : window.location = "/login";
+
+    </script>
+    <link rel="stylesheet" href="assets/plugins/login/login.css">
+    <link rel="stylesheet" href="assets/plugins/login/toastmessage/jquery.toastmessage.css">
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <header>
+        <div>
+           <h1 style="color:white;">联点数据智慧云平台</h1>
+            <a href="/">首页</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <a href="/register" class="js-register-btn">新用户注册</a>
+
+        <div class="container_left">
+        </div>
+
+        <div class="container_right">
+            <form class="form login-form">
+                <dl>
+                    <dt>帐号 :&nbsp;</dt>
+                    <dd>
+                        <input class="username" type="text">
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>密码 :&nbsp;</dt>
+                    <dd>
+                        <input class="password" type="password"/>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>验证码 :&nbsp;</dt>
+                    <dd>
+                        <input type="text" class="js-register-authCode"/>
+                        <input type="button" class="authCode-style"/>
+                        <a href="javascript:" id="validate">看不清</a>
+                    </dd>
+                </dl>
+                <a href="/modifyPwd" class="js-forget-btn">忘记密码?</a>
+                <button type="submit" id="login-button">登录</button>
+
+            </form>
+        </div>
+
+    </div>
+
+    <footer>
+        <div>
+            <img src="assets/img/linkdotter.png">
+
+            <!--<p style="margin-top: 4px">联点数据智慧云平台</p>-->
+        </div>
+        <div class="mainLink">
+            <p>
+                <a href="http://linkdotter.com">主站</a>
+                <a href="http://linkdotter.com/gyld">关于我们</a>
+                <a href="http://linkdotter.com/lxwm">联系我们</a>
+                <a href="">加入我们</a>
+            </p>
+
+            <p style="color: #999;font-size: 14px;margin-top: 10px;">联点数据智慧云 &nbsp; &nbsp; 苏ICP备16002274号-1</p>
+        </div>
+        <div></div>
+    </footer>
+</div>
+<!--wrapper-->
+
+<script src="assets/plugins/login/toastmessage/jquery.toastmessage.js"></script>
+
+<script src="../bower_components/is_js/is.min.js"></script>
+<script src="assets/plugins/login/login.js"></script>
+<script src="assets/plugins/login/scripts.js"></script>
+
+</body>
+</html>

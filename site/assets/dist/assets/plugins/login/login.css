@@ -1,0 +1,413 @@
+/* ------- This is the CSS Reset ------- */
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre, a,
+abbr, acronym, address, big, cite, code, del,
+dfn, em, img, ins, kbd, q, s, samp, small,
+strike, strong, sub, sup, tt, var, u, i, center,
+dl, dt, dd, ol, ul, li, fieldset, form, label,
+legend, table, caption, tbody, tfoot, thead, tr,
+th, td, article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup, menu,
+nav, output, ruby, section, summary, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+/* ------- HTML5 display-role reset for older browsers ------- */
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
+body {
+    line-height: 1;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+blockquote, q {
+    quotes: none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/*-----------------------------------------------------------------------------------*/
+
+header {
+    height: 50px;
+    background: #006b7b none repeat scroll 0 0;
+}
+
+header div {
+    width: 56%;
+    margin: 0 auto;
+    zoom: 1;
+    overflow: hidden;
+    line-height: 50px;
+}
+
+header h1 {
+    float: left;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+header a {
+    display: block;
+    width: 78px;
+    height: 24px;
+    line-height: 24px;
+    margin-top: 13px;
+    float: right;
+    font-size: 12px;
+    border: 1px solid #ffffff;
+    color: #ffffff;
+    text-align: center;
+    text-decoration: none;
+}
+
+.container {
+    width: 56%;
+    margin: 110px auto 100px;
+    zoom: 1;
+    overflow: hidden;
+}
+
+.js-register-btn {
+    display: block;
+    text-align: right;
+    color: #006b7b;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 8px;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 1450px){
+    .container_left {
+        float: left;
+        width: 30%;
+        height: 100%;
+    }
+
+    .container_right {
+        float: right;
+        width: 70%;
+        height: 358px;
+        border: 1px solid #e8e8e8;
+        zoom: 1;
+        overflow: hidden;
+    }
+}
+
+@media screen and (min-width: 1500px){
+    .container_left {
+        float: left;
+        width: 50%;
+        height: 100%;
+    }
+
+    .container_right {
+        float: right;
+        width: 50%;
+        height: 358px;
+        border: 1px solid #e8e8e8;
+        zoom: 1;
+        overflow: hidden;
+    }
+}
+
+.container_right form {
+    width: 100%;
+    padding-top: 20px;
+}
+
+.container_right dl, .phone_reset dl, .email_reset dl, .retSuccess dl, .reset-form dl, .register-form dl {
+    padding: 4px 0 20px 0;
+    overflow: hidden;
+}
+
+.container_right dt, .phone_reset dt, .email_reset dt, .retSuccess dt, .reset-form dt, .register-form dt {
+    float: left;
+    width: 100px;
+    height: 32px;
+    color: #666;
+    line-height: 32px;
+    text-align: right;
+    margin-right: 3px;
+
+}
+
+.container_right dd, .phone_reset dd, .email_reset dd, .retSuccess dd, .reset-form dd, .register-form dd {
+    float: left;
+    height: 32px;
+}
+
+.container_right dd input, .phone_reset dd input, .email_reset dd input, .reset-form dd input, .register-form dd input {
+    outline: none;
+    border: 1px solid #e1e1e1;
+    padding: 5px 10px;
+    vertical-align: middle;
+    font-size: 14px;
+    color: #666;
+}
+
+.container_right dd input:focus, .phone_resetdd dd input:focus,
+.email_reset dd input:focus, .reset-form dd input:focus, .register-form dd input:focus {
+    border: 1px solid #006b7b;
+}
+
+.username, .password, .reset-val, .reset_id, .reset_password, .reset_smsCode, .passwd-input, .passwd2-input,
+.js-register-user, .js-register-passwd, .js-register-passwd2, .js-register-phone, .js-register-email{
+    width: 208px;
+    height: 20px;
+    line-height: 22px;
+}
+
+.js-register-authCode {
+    width: 102px;
+    height: 20px;
+    line-height: 22px;
+}
+
+.authCode-style {
+    height: 32px;
+    font-family: "Arial";
+    font-size: 18px !important;
+    font-style: italic;
+    font-weight: bold;
+    letter-spacing: 4px;
+    width: 100px;
+    background: url("../../img/authCodeBg.png") no-repeat;
+}
+
+#validate, #get_smsCode {
+    cursor: pointer;
+    color: #666;
+    font-size: 14px;
+    margin-left: 15px;
+    text-decoration: none;
+}
+
+.login-form > a, .phone_reset > a {
+    color: #666;
+    display: block;
+    cursor: pointer;
+    text-align: left;
+    font-size: 12px;
+    margin-left: 104px;
+    text-decoration: none;
+}
+
+#login-button, #email_reset_button, #phone_reset_button, #return_login, #reset-btn, #register-btn {
+    width: 230px;
+    height: 40px;
+    border: 0 none;
+    background: #006b7b;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+    margin: 16px 0 16px 104px;
+
+}
+
+footer {
+    width: 56%;
+    height: 100px;
+    margin: 0 auto;
+    padding: 20px 0;
+    zoom: 1;
+    overflow: hidden;
+    border-top: 1px solid #ccc;
+}
+
+footer div {
+    float: left;
+}
+
+footer > div:first-child {
+    /*margin: 12px 20px 0 203px;*/
+    margin: 12px 20px 0 230px;
+    color: #006b7b;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.mainLink {
+    padding: 16px;
+    border-left: 1px solid #ccc;
+}
+
+.mainLink a {
+    font-size: 14px;
+    color: #1F509F;
+    cursor: pointer;
+    padding-right: 15px;
+    text-decoration: none;
+}
+
+.mainLink a:hover {
+    color: #F60;
+}
+
+/*----------------------end login-------------------*/
+.reset {
+    padding-top: 60px;
+    border: 1px solid #e9e9e9;
+}
+
+.email_reset {
+    display: none;
+}
+
+.phone_reset, .email_reset, .retSuccess, .reset-form, .register_return{
+    padding-left: 250px;
+    padding-bottom: 100px;
+}
+
+.phone_reset h4, .retSuccess h4, .reset-form h4 {
+    font-size: 18px;
+    color: #ee7218;
+    line-height: 80px;
+}
+
+.email_reset h4 {
+    color: #999;
+    font-size: 16px;
+    margin: 30px 0;
+}
+
+#return_login, .back-btn {
+    display: block;
+    text-align: center;
+    line-height: 40px;
+    text-decoration: none;
+}
+
+.retSuccess {
+    display: none;
+}
+
+.retSuccess dd{
+    color: #666;
+    line-height: 32px;
+}
+
+.reset ul{
+    zoom: 1;
+    overflow: hidden;
+    color: #ee7218;
+    padding-left: 250px;
+}
+
+.reset ul li{
+    float: left;
+    cursor: pointer;
+    margin-right: 12px;
+    font-size: 18px;
+    line-height: 80px;
+}
+
+.reset ul li:nth-child(1){
+   color: #999;
+}
+
+
+
+/*---------------register---------------*/
+
+
+.pwd {
+    width: 80px;
+    height: 26px;
+    line-height: 26px;
+    padding-top: 2px;
+    background: rgba(45, 45, 45, .15);
+    border-top: 1px solid #D0D0D0;
+    border-bottom: 1px solid #D0D0D0;
+    border-left: 1px solid #D0D0D0;
+}
+
+.pwd_c_r {
+    border-right: 1px solid #D0D0D0;
+}
+
+.pwd_Weak_c {
+    background-color: #FF4545;
+    border-top: 1px solid #BB2B2B;
+    border-bottom: 1px solid #BB2B2B;
+    border-left: 1px solid #BB2B2B;
+}
+
+.pwd_Medium_c {
+    background-color: #FFD35E;
+    border-top: 1px solid #E9AE10;
+    border-bottom: 1px solid #E9AE10;
+    border-left: 1px solid #E9AE10;
+}
+
+.pwd_Strong_c {
+    background-color: #3ABB1C;
+    border-top: 1px solid #267A12;
+    border-bottom: 1px solid #267A12;
+    border-left: 1px solid #267A12;
+}
+
+.pwd_Weak_c_r {
+    border-right: 1px solid #BB2B2B;
+}
+
+.pwd_Medium_c_r {
+    border-right: 1px solid #E9AE10;
+}
+
+.pwd_Strong_c_r {
+    border-right: 1px solid #267A12;
+}
+
+.register_top{
+    height: 64px;
+    background: url("../../img/registerTop1.jpg") no-repeat 0 0 #f2f2f2;
+    border-bottom: 1px solid #006b7b;
+}
+
+.register-form{
+    padding-top: 66px;
+    padding-left: 200px;
+}
+
+.register_return{
+    display: none;
+    margin-top: 110px;
+}
+
+.register_return h4{
+    color: #ff8a00;
+    font-size: 30px;
+    margin-left: 104px;
+}
+
+.register_return p{
+    color: #999;
+    margin: 40px 0 20px 104px;
+    font-size: 16px;
+}
+
+

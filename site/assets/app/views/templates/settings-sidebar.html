@@ -1,0 +1,163 @@
+<div id="rightbar-settings"
+     style="overflow: scroll;top:2px;height:100%;width:500px;box-shadow:rgb(215, 215, 215) 1px 1px 2px 1px;position: absolute">
+  <span ng-click="hideSettingsSideBar()"
+        style="position: absolute;top:280px;left:0px;height:40px;width:5px;font-weight: bolder;"
+        class="btn btn-default btn-sm">
+    >
+    <!--<i class="fa fa-mail-forward"></i>-->
+  </span>
+
+  <tabset panel-tabs="true" panel-class="panel-success">
+    <tabset-heading>
+      <!---设备信息--->
+    </tabset-heading>
+
+    <tab ng-controller="SettingTabController">
+      <tab-heading>
+        <i class="fa fa-align-left"></i>&nbsp;基本信息
+      </tab-heading>
+      <!--debug curEdit: {{curEdit}}-->
+      <h5 class="text-info"><i class="fa fa-map-marker" style="font-size:smaller"></i>&nbsp;参考位置</h5>
+
+      <leaflet center="center"
+               markers="markers"
+               layers="layers"
+               height="280px"
+               width="98%">
+      </leaflet>
+
+      <h6 style="color:grey">({{locateState}})</h6>
+      <!--<h6 style="color:grey">(自动坐标仅供参考，可手动拖动)</h6>-->
+
+      <h5 class="text-info"><i class="fa fa-edit" style="font-size:smaller"></i>&nbsp;基本信息</h5>
+      <!--<button class="btn btn-default btn-sm" ng-click="getCoor()">getCoor</button>-->
+
+      <span>添加分组</span>
+      <br>
+      <ui-select multiple ng-model="multipleSelect.groups" theme="bootstrap" ng-disabled="disabled" close-on-select="false" style="width: 300px;" title="Choose a color">
+        <ui-select-match placeholder="Select Group ...">{{$item}}</ui-select-match>
+        <ui-select-choices repeat="group in availableGroups | filter:$select.search">
+          {{group}}
+        </ui-select-choices>
+      </ui-select>
+      <hr>
+      <form class="form-horizontal">
+        <div class="form-group">
+          <label for="focusedinput" class="col-sm-2 control-label">设备名称</label>
+
+          <div class="col-sm-6">
+            <input type="text" class="form-control input-sm" id="focusedinput" ng-model="curEdit.dev_alias">
+          </div>
+          <div class="col-sm-3">
+            <p class="help-block">Error msg</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">经度</label>
+
+          <div class="col-sm-6">
+            <input disabled type="text" class="form-control input-sm" ng-model="curEdit.lat">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">纬度</label>
+
+          <div class="col-sm-6">
+            <input disabled type="text" class="form-control input-sm" ng-model="curEdit.lng">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">设备ID</label>
+          <div class="col-sm-6">
+            <input disabled type="text" class="form-control input-sm" ng-model="curEdit.dev_uuid">
+          </div>
+        </div>
+
+        <hr>
+        <button class="btn btn-success" ng-click="updateDevInfo()">保存</button>
+        <button class="btn btn-default" ng-click="hideSettingsSideBar()">取消</button>
+
+      </form>
+    </tab>
+
+    <tab ng-controller="RemoteCtrlTabController">
+      <tab-heading>
+        <i class="fa fa-wrench"></i>&nbsp;远程控制
+      </tab-heading>
+      <!--setting-page-->
+      <div ng-repeat="item in cmdList">
+        <!--<div ng-click="item.__show = !item.__show" class="control-tab-title">-->
+        <div ng-click="ctrlPanelToggle(item)" class="control-tab-title">
+      <span style="background-color: rgb(145, 182, 219);border-radius: 4px;padding:2px 5px;color:#fff;font-weight:bold">
+        <i class="fa fa-wrench"></i>&nbsp;{{item | uppercase | translate}}
+        <span class="pull-right"
+              style="color:grey !important"
+              ng-class="{'fa fa-angle-down':cmdListOpt[item].show, 'fa fa-angle-right': !cmdListOpt[item].show}">
+              <!--ng-class="{'fa fa-angle-down':item.__show, 'fa fa-angle-right': !item.__show}">-->
+        </span>
+      </span>
+        </div>
+
+        <div collapse="!cmdListOpt[item].show" class="table-responsive" style="overflow: scroll">
+
+          <table class="table table-bordered table-condensed table-striped">
+            <tbody>
+            <tr ng-repeat="(key, val) in cmdListOpt[item].data.showcase">
+              <td align="left" style="width:30%">{{key}}</td>
+              <td>
+                <!--onbeforesave="updateCtrlData(item.title,key ,$data)"-->
+
+                <a ng-show="val.display == 'select'" class="light_blue border-bottom-none"
+                   onaftersave="changeShowcase(item, key, $data)"
+                   onshow="loadOption(item, key, val.show_key)"
+                   e-ng-options="s for s in curOption"
+                   editable-select="val.val">
+                  {{val.val}}
+                </a>
+
+                <a ng-show="val.display == 'text'" class="light_blue border-bottom-none"
+                   onaftersave="verifyData(item, key, $data)"
+                   editable-text="val.val">
+                  {{ val.val || 'empty' }}
+                </a>
+
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <!--collapse table-->
+      </div>
+      <!--ng-repeat="item in cmdList"-->
+    </tab>
+  </tabset>
+
+  <hr>
+</div><!--rightbardetail done-->
+
+
+<script>
+
+  $('#rightbar-settings').bind('mousewheel DOMMouseScroll', function(e) {
+    var scrollTo = null;
+
+    console.info("mousewheel DOMMouseScroll: ", e)
+
+    if (e.type == 'mousewheel') {
+      scrollTo = (e.originalEvent.wheelDelta * -1);
+    }
+    else if (e.type == 'DOMMouseScroll') {
+      scrollTo = 40 * e.originalEvent.detail;
+    }
+
+    if (scrollTo) {
+      e.preventDefault();
+      $(this).scrollTop(scrollTo + $(this).scrollTop());
+    }
+  });
+
+
+</script>
+

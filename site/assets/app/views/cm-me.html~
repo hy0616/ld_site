@@ -1,0 +1,662 @@
+<html>
+<head>
+    <style>
+        table tr {
+            height: 21px;
+            line-height: 21px;
+        }
+    </style>
+</head>
+<body>
+<div class="container" ng-controller="MeController">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="me_head">
+                <div class="circular">
+                    <div class="peng_img">
+                        <img src="assets/img/peng.png">
+                    </div>
+                </div>
+                <div class="username">
+                    <h3><strong>尊敬的{{curUserData.username}}您好</strong></h3>
+                </div>
+
+                <div class="peng_message">
+
+                    <div ng-if="padSmartgates.length == 0"
+                            style="font-size: 1.6em;margin: 80px auto;">
+                        <p>大棚无终端设备,请联系管理员</p>
+                    </div>
+
+                    <div ng-if="!padSmartgates.length == 0">
+
+                        <div class="row row1">
+                            <div class="col-md-3">
+                                <span>大棚名称：</span>
+                                <select ng-model="watchPad.val" ng-change="padProcessing(watchPad.val)"
+                                        ng-options="pad.smartgate.sn as pad.smartgate.dev_name for pad in padSmartgates">
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
+                                <span>sn：{{padData.smartgate.sn}}</span>
+                            </div>
+
+                            <div class="col-md-3">
+                                <span>种植作物：{{padData.smartgate.plant_name}}</span>
+                            </div>
+
+                            <div class="col-md-3">
+                                <span>大棚面积：{{padData.smartgate.area}}（平方米）</span>
+                            </div>
+
+
+                        </div>
+
+                        <div class="row row1">
+
+                            <div class="col-md-3">
+                                <span>种植时间：{{padData.smartgate.plant_time}}</span>
+                            </div>
+
+                            <div class="col-md-3">
+                                <span> 预计收获时间：{{padData.smartgate.harvest_time}}</span>
+                            </div>
+
+                            <div class="col-md-3">
+                                <span> 预计年产量：{{padData.smartgate.expectation}}（公斤）</span>
+                            </div>
+
+                            <div class="col-md-3">
+                                <span>实际年产量：{{padData.smartgate.harvest_weight}}（公斤）</span>
+
+                            </div>
+
+                        </div>
+                        <!--row-->
+
+                        <div class="row" style="height: 100px;margin-top: 10px;">
+                            <div class="spacing" ng-class="{'bottom_border' : equipment_show}">
+
+                                <button class="control" ng-click="equipment()">设备列表</button>
+                            </div>
+                            <div class="spacing" ng-class="{'bottom_border' : statistics_show}">
+
+                                <button class="control" ng-click="statistics()">统计分析</button>
+                            </div>
+                            <!--<div class="spacing" ng-class="{'bottom_border' : control_show}">
+
+                                <button class="control" ng-click="control()">设备控制</button>
+                            </div>-->
+
+                            <div class="spacing">
+                                <button class="control" ng-click="pad_delete(padData.smartgate.sn)">删除网关</button>
+                            </div>
+
+                            <!--<div class="spacing">
+
+                                <button class="control" ng-click="refresh()">刷新</button>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="me_foot">
+                <div ng-if="equipment_show" style="overflow: auto;zoom: 1">
+                    <div class="col-md-12">
+                        <div ng-repeat="item in padData.components">
+                            <div class="me_equipment"
+                                 ng-class="{'me_dev_online':item.online_state === 'online', 'me_dev_offline':item.online_state === 'offline'}">
+                                <li ng-show=" 'humidity-temperature' == item.dev_type" class="me_dev_type_back">
+
+                                    <div class="me_dev_type_head">
+                                        <div style="text-align: right">
+                                            <img style="cursor: pointer;color: #df5c3d" alt="删除" ng-click="dev_delete(padData,item)" src="../assets/img/dev_del.png">
+                                        </div>
+                                        <div class="wendu_back">
+                                            <div class="wendu">
+                                                <img src="../assets/img/wendu.png">
+                                            </div>
+                                        </div>
+                                        <div style="margin-top: 10px">
+                                            <span> {{item.dev_name}} </span>
+                                        </div>
+                                    </div>
+
+                                    <ul class="me_dev_type_foot">
+                                        <li>设备类型: 温湿度传感器</li>
+                                        <li>sn: {{item.sn}}</li>
+                                        <li ng-show="item.online_state == 'online'">设备状态: 在线</li>
+                                        <li ng-show="item.online_state == 'offline'">设备状态: 离线</li>
+                                        <li ng-show="item.dev_alias === '' || item.dev_alias === undefined || item.dev_alias === null || item.dev_alias === 'undefined'">
+                                            设备别名: 无别名
+                                        </li>
+                                        <li ng-show="item.dev_alias !== '' && item.dev_alias !== undefined && item.dev_alias !== null && item.dev_alias !== 'undefined'">
+                                            设备别名:{{item.dev_alias}}
+                                        </li>
+                                        <li>温度: <span odometer="item.air_temperature"
+                                                      odometer-options="{theme: 'default', duration: 1000}"></span> °C
+                                        </li>
+                                        <li>湿度: <span odometer="item.air_humidity"
+                                                      odometer-options="{theme: 'default', duration: 1000}"></span> %HR
+                                        </li>
+                                        <li>最后更新时间: <span class="pull-center" am-time-ago="item.server_time"> </span>
+                                        </li>
+                                    </ul>
+
+                                </li>
+
+                                <li ng-show="'camera' == item.dev_type" class="me_dev_type_back">
+
+                                    <div class="me_dev_type_head">
+                                        <div style="text-align: right">
+                                            <img style="cursor: pointer;color: #df5c3d" alt="删除" ng-click="dev_delete(padData,item)" src="../assets/img/dev_del.png">
+                                        </div>
+                                        <div class="wendu_back">
+                                            <div class="wendu">
+                                                <img src="../assets/img/camera.png">
+                                            </div>
+                                        </div>
+                                        <div style="margin-top: 10px">
+                                            <span> {{item.dev_name}} </span>
+                                        </div>
+                                    </div>
+
+                                    <ul class="me_dev_type_foot">
+                                        <li>设备类型: 普通摄像头</li>
+                                        <li>sn: {{item.sn}}</li>
+                                        <li ng-show="item.online_state == 'online'">设备状态: 在线</li>
+                                        <li ng-show="item.online_state == 'offline'">设备状态: 离线</li>
+                                        <li ng-show="item.dev_alias === '' || item.dev_alias === undefined || item.dev_alias === null || item.dev_alias === 'undefined'">
+                                            设备别名: 无别名
+                                        </li>
+                                        <li ng-show="item.dev_alias !== '' && item.dev_alias !== undefined && item.dev_alias !== null && item.dev_alias !== 'undefined'">
+                                            设备别名:{{item.dev_alias}}
+                                        </li>
+                                        <li>最后更新时间: <span class="pull-center" am-time-ago="item.server_time"> </span>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li ng-show=" 'cameraip' == item.dev_type" class="me_dev_type_back">
+
+                                    <div class="me_dev_type_head">
+                                        <div style="text-align: right">
+                                            <img style="cursor: pointer;color: #df5c3d" alt="删除" ng-click="dev_delete(padData,item)" src="../assets/img/dev_del.png">
+                                        </div>
+                                        <div class="wendu_back">
+                                            <div class="wendu">
+                                                <img src="../assets/img/cameraip.png">
+                                            </div>
+                                        </div>
+                                        <div style="margin-top: 10px">
+                                            <span> {{item.dev_name}} </span>
+                                        </div>
+                                    </div>
+
+                                    <ul class="me_dev_type_foot">
+                                        <li>设备类型: 网络摄像头</li>
+                                        <li>sn: {{item.sn}}</li>
+                                        <li ng-show="item.online_state == 'online'">设备状态: 在线</li>
+                                        <li ng-show="item.online_state == 'offline'">设备状态: 离线</li>
+                                        <li ng-show="item.dev_alias === '' || item.dev_alias === undefined || item.dev_alias === null || item.dev_alias === 'undefined'">
+                                            设备别名: 无别名
+                                        </li>
+                                        <li ng-show="item.dev_alias !== '' && item.dev_alias !== undefined && item.dev_alias !== null && item.dev_alias !== 'undefined'">
+                                            设备别名:{{item.dev_alias}}
+                                        </li>
+                                        <li>最后更新时间: <span class="pull-center" am-time-ago="item.server_time"> </span>
+                                        </li>
+                                        <li>
+                                            <a class="me_dev_delete" target="_self" me-video>播放</a>
+                                        </li>
+                                    </ul>
+
+                                </li>
+
+                                <div id="me_box">
+                                    <a id="me_shut">×</a>
+
+                                   <!-- <h3 ng-show="item.dev_alias == '' || item.dev_alias == undefined || item.dev_alias == null || item.dev_alias == 'undefined'">
+                                        {{padData.smartgate.dev_name}}</h3>
+                                    <h3 ng-show="item.dev_alias != '' && item.dev_alias != undefined && item.dev_alias != null && item.dev_alias != 'undefined'">
+                                        {{padData.smartgate.dev_name}}&#45;&#45;{{item.dev_alias}}</h3>-->
+
+                                    <h3>{{padData.smartgate.dev_name}}</h3>
+
+                                    <div id="me_video"></div>
+                                </div>
+
+                                <li ng-show=" 'erelay' == item.dev_type" class="me_dev_type_back">
+
+                                    <div class="me_dev_type_head">
+                                        <div style="text-align: right">
+                                            <img style="cursor: pointer;color: #df5c3d" alt="删除" ng-click="dev_delete(padData,item)" src="../assets/img/dev_del.png">
+                                        </div>
+                                        <div class="wendu_back">
+                                            <div class="wendu">
+                                                <img src="../assets/img/erelay.png">
+                                            </div>
+                                        </div>
+                                        <div style="margin-top: 10px">
+                                            <span> {{item.dev_name}} </span>
+                                        </div>
+                                    </div>
+
+                                    <ul class="me_dev_type_foot">
+                                        <li>设备类型: 普通控制器</li>
+                                        <li>sn: {{item.sn}}</li>
+                                        <li ng-show="item.online_state == 'online'">设备状态: 在线</li>
+                                        <li ng-show="item.online_state == 'offline'">设备状态: 离线</li>
+                                        <li ng-show="item.status == 1">设备开关: 开</li>
+                                        <li ng-show="item.status == 0">设备开关: 关</li>
+                                        <li ng-show="item.dev_alias === '' || item.dev_alias === undefined || item.dev_alias === null || item.dev_alias === 'undefined'">
+                                            设备别名: 无别名
+                                        </li>
+                                        <li ng-show="item.dev_alias !== '' && item.dev_alias !== undefined && item.dev_alias !== null && item.dev_alias !== 'undefined'">
+                                            设备别名:{{item.dev_alias}}
+                                        </li>
+                                        <li>最后更新时间: <span class="pull-center" am-time-ago="item.server_time"> </span>
+                                        </li>
+
+                                        <div style="margin: 8px 16px 0;">
+                                            <div class="pull-left" style="margin-right: 8px;">
+                                                 <span class="btn btn-sm btn-danger" ng-click="devControl1(padData.smartgate.sn, item.sn, 1)"
+                                                       ng-show="item.status != 1"> <span ng-show="switchBtnsLoading['forward']">
+                                                        <i class="fa fa-spinner fa-spin"></i>&nbsp; </span> &nbsp; 开 &nbsp; </span>
+                                                <span class="btn btn-sm btn-success" ng-show="item.status == 1"> &nbsp; 开 &nbsp; </span>
+                                            </div>
+
+                                            <div class="pull-left">
+                                                <span class="btn btn-sm btn-danger" ng-click="devControl1(padData.smartgate.sn, item.sn, 0)"
+                                                      ng-show="item.status != 0"> <span ng-show="switchBtnsLoading['stop']">
+                                                    <i class="fa fa-spinner fa-spin"></i>&nbsp; </span> &nbsp; 关 &nbsp;</span>
+                                                <span class="btn btn-sm btn-success" ng-show="item.status == 0"> &nbsp; 关 &nbsp; </span>
+                                            </div>
+                                        </div>
+
+                                    </ul>
+                                </li>
+
+                                <li ng-show=" 'erelay2' == item.dev_type" class="me_dev_type_back">
+
+                                    <div class="me_dev_type_head">
+                                        <div style="text-align: right">
+                                            <img style="cursor: pointer;color: #df5c3d" alt="删除" ng-click="dev_delete(padData,item)" src="../assets/img/dev_del.png">
+                                        </div>
+                                        <div class="wendu_back">
+                                            <div class="wendu">
+                                                <img class="soil_th1" src="../assets/img/erelay2.png">
+                                            </div>
+                                        </div>
+                                        <div style="margin-top: 10px">
+                                            <span> {{item.dev_name}} </span>
+                                        </div>
+                                    </div>
+
+                                    <ul class="me_dev_type_foot">
+                                        <li>设备类型: 卷帘机控制器</li>
+                                        <li>sn: {{item.sn}}</li>
+                                       <!-- <li ng-show="item.online_state == 'online'">设备状态: 在线</li>-->
+                                        <li ng-show="item.online_state == 'offline'">设备状态: 离线</li>
+                                        <li ng-show="item.status == 0 && item.online_state != 'offline'">设备状态: 上行</li>
+                                        <li ng-show="item.status == 1 && item.online_state != 'offline'">设备状态: 下行</li>
+                                        <li ng-show="item.status == 2 && item.online_state != 'offline'">设备状态: 停止</li>
+                                        <li ng-show="item.dev_alias === '' || item.dev_alias === undefined || item.dev_alias === null || item.dev_alias === 'undefined'">
+                                            设备别名: 无别名
+                                        </li>
+                                        <li ng-show="item.dev_alias !== '' && item.dev_alias !== undefined && item.dev_alias !== null && item.dev_alias !== 'undefined'">
+                                            设备别名:{{item.dev_alias}}
+                                        </li>
+                                        <li>最后更新时间: <span class="pull-center" am-time-ago="item.server_time"> </span>
+                                        </li>
+                                        <div style="margin-top: 8px;">
+                                            <div class="pull-left" style="margin-right: 6px;">
+                                                 <span class="btn btn-sm btn-danger" ng-click="devControl2(padData.smartgate.sn, item.sn, 'forward')"
+                                                       ng-show="item.status != 0"> <span ng-show="switchBtnsLoading['forward']">
+                                                        <i class="fa fa-spinner fa-spin"></i>&nbsp; </span> 上行 </span>
+                                                 <span class="btn btn-sm btn-success" ng-show="item.status == 0"> 上行 </span>
+                                            </div>
+
+                                            <div class="pull-left" style="margin-right: 6px;">
+                                                <span class="btn btn-sm btn-danger" ng-click="devControl2(padData.smartgate.sn, item.sn, 'stop')"
+                                                    ng-show="item.status != 2"> <span ng-show="switchBtnsLoading['stop']">
+                                                    <i class="fa fa-spinner fa-spin"></i>&nbsp; </span> 停止 </span>
+                                                <span class="btn btn-sm btn-success" ng-show="item.status == 2"> 停止 </span>
+                                            </div>
+
+                                            <div class="pull-left">
+                                                <span class="btn btn-sm btn-danger" ng-click="devControl2(padData.smartgate.sn, item.sn, 'back')"
+                                                    ng-show="item.status != 1"> <span ng-show="switchBtnsLoading['back']">
+                                                    <i class="fa fa-spinner fa-spin"></i>&nbsp; </span> 下行 </span>
+                                                <span class="btn btn-sm btn-success" ng-show="item.status == 1"> 下行 </span>
+                                            </div>
+                                        </div>
+                                    </ul>
+                                </li>
+
+
+
+                                <li ng-show=" 'illumination' == item.dev_type" class="me_dev_type_back">
+
+                                    <div class="me_dev_type_head">
+                                        <div style="text-align: right">
+                                            <img style="cursor: pointer;color: #df5c3d" alt="删除" ng-click="dev_delete(padData,item)" src="../assets/img/dev_del.png">
+                                        </div>
+                                        <div class="wendu_back">
+                                            <div class="wendu">
+                                                <img src="../assets/img/illumination.png">
+                                            </div>
+                                        </div>
+                                        <div style="margin-top: 10px">
+                                            <span> {{item.dev_name}} </span>
+                                        </div>
+                                    </div>
+
+                                    <ul class="me_dev_type_foot">
+                                        <li>设备类型: 光照传感器</li>
+                                        <li>sn: {{item.sn}}</li>
+                                        <li ng-show="item.online_state == 'online'">设备状态: 在线</li>
+                                        <li ng-show="item.online_state == 'offline'">设备状态: 离线</li>
+                                        <li ng-show="item.dev_alias === '' || item.dev_alias === undefined || item.dev_alias === null || item.dev_alias === 'undefined'">
+                                            设备别名: 无别名
+                                        </li>
+                                        <li ng-show="item.dev_alias !== '' && item.dev_alias !== undefined && item.dev_alias !== null && item.dev_alias !== 'undefined'">
+                                            设备别名:{{item.dev_alias}}
+                                        </li>
+                                        <li>光照: <span odometer="item.lux"
+                                                      odometer-options="{theme: 'default', duration: 1000}"></span> lux
+                                        </li>
+                                        <li>最后更新时间: <span class="pull-center" am-time-ago="item.server_time"> </span>
+                                        </li>
+
+                                    </ul>
+                                </li>
+
+                                <li ng-show=" 'co' == item.dev_type" class="me_dev_type_back">
+
+                                    <div class="me_dev_type_head">
+                                        <div style="text-align: right">
+                                            <img style="cursor: pointer;color: #df5c3d" alt="删除" ng-click="dev_delete(padData,item)" src="../assets/img/dev_del.png">
+                                        </div>
+                                        <div class="wendu_back">
+                                            <div class="wendu">
+                                                <img src="../assets/img/co.png">
+                                            </div>
+                                        </div>
+                                        <div style="margin-top: 10px">
+                                            <span> {{item.dev_name}} </span>
+                                        </div>
+                                    </div>
+
+                                    <ul class="me_dev_type_foot">
+                                        <li>设备类型: co传感器</li>
+                                        <li>sn: {{item.sn}}</li>
+                                        <li ng-show="item.online_state == 'online'">设备状态: 在线</li>
+                                        <li ng-show="item.online_state == 'offline'">设备状态: 离线</li>
+                                        <li ng-show="item.dev_alias === '' || item.dev_alias === undefined || item.dev_alias === null || item.dev_alias === 'undefined'">
+                                            设备别名: 无别名
+                                        </li>
+                                        <li ng-show="item.dev_alias !== '' && item.dev_alias !== undefined && item.dev_alias !== null && item.dev_alias !== 'undefined'">
+                                            设备别名:{{item.dev_alias}}
+                                        </li>
+                                        <li>最后更新时间: <span class="pull-center" am-time-ago="item.server_time"> </span>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li ng-show=" 'co2' == item.dev_type" class="me_dev_type_back">
+
+                                    <div class="me_dev_type_head">
+                                        <div style="text-align: right">
+                                            <img style="cursor: pointer;color: #df5c3d" alt="删除" ng-click="dev_delete(padData,item)" src="../assets/img/dev_del.png">
+                                        </div>
+                                        <div class="wendu_back">
+                                            <div class="wendu">
+                                                <img src="../assets/img/co2.png">
+                                            </div>
+                                        </div>
+                                        <div style="margin-top: 10px">
+                                            <span> {{item.dev_name}} </span>
+                                        </div>
+                                    </div>
+
+                                    <ul class="me_dev_type_foot">
+                                        <li>设备类型: co2传感器</li>
+                                        <li>sn: {{item.sn}}</li>
+                                        <li ng-show="item.online_state == 'online'">设备状态: 在线</li>
+                                        <li ng-show="item.online_state == 'offline'">设备状态: 离线</li>
+                                        <li>浓度值: <span odometer="item.co2_ppm"
+                                                       odometer-options="{theme: 'default', duration: 1000}"></span> ppm
+                                        </li>
+                                        <li ng-show="item.dev_alias === '' || item.dev_alias === undefined || item.dev_alias === null || item.dev_alias === 'undefined'">
+                                            设备别名: 无别名
+                                        </li>
+                                        <li ng-show="item.dev_alias !== '' && item.dev_alias !== undefined && item.dev_alias !== null && item.dev_alias !== 'undefined'">
+                                            设备别名:{{item.dev_alias}}
+                                        </li>
+                                        <li>最后更新时间: <span class="pull-center" am-time-ago="item.server_time"> </span>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li ng-show=" 'soil_th' == item.dev_type" class="me_dev_type_back">
+
+                                    <div class="me_dev_type_head">
+                                        <div style="text-align: right">
+                                            <img style="cursor: pointer;color: #df5c3d" alt="删除" ng-click="dev_delete(padData,item)" src="../assets/img/dev_del.png">
+                                        </div>
+                                        <div class="wendu_back">
+                                            <div class="wendu">
+                                                <img src="../assets/img/soil_th.png">
+                                            </div>
+                                        </div>
+                                        <div style="margin-top: 10px">
+                                            <span> {{item.dev_name}} </span>
+                                        </div>
+                                    </div>
+
+                                    <ul class="me_dev_type_foot">
+                                        <li>设备类型: 土壤温湿度传感器</li>
+                                        <li>sn: {{item.sn}}</li>
+                                        <li ng-show="item.online_state == 'online'">设备状态: 在线</li>
+                                        <li ng-show="item.online_state == 'offline'">设备状态: 离线</li>
+                                        <li ng-show="item.dev_alias === '' || item.dev_alias === undefined || item.dev_alias === null || item.dev_alias === 'undefined'">
+                                            设备别名: 无别名
+                                        </li>
+                                        <li ng-show="item.dev_alias !== '' && item.dev_alias !== undefined && item.dev_alias !== null && item.dev_alias !== 'undefined'">
+                                            设备别名:{{item.dev_alias}}
+                                        </li>
+                                        <li>温度: <span odometer="item.air_temperature"
+                                                      odometer-options="{theme: 'default', duration: 1000}"></span> °C
+                                        </li>
+                                        <li>湿度: <span odometer="item.air_humidity"
+                                                      odometer-options="{theme: 'default', duration: 1000}"></span> %HR
+                                        </li>
+                                        <li>最后更新时间: <span class="pull-center" am-time-ago="item.server_time"> </span>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <!--  <li ng-show="falsh_data" class="online_block">
+                                  <div class="price">
+                                      <div class="price_figure">
+                                          <span class="price_number">土壤酸碱度</span>
+                                      </div>
+                                  </div>
+                                  <ul class="features">
+                                      <li>设备类型:土壤酸碱度传感器</li>
+                                       <li>sn: 0000000000000021</li>
+                                      <li>设备状态: 在线</li>
+                                      <li>设备别名: 无别名</li>
+                                      <li>土壤酸碱度: 7.5 pH</li>
+                                      <li>最后更新时间: <span class="pull-center" am-time-ago="item.server_time"> </span></li>
+                                  </ul>
+                              </li>
+
+                              <li ng-show="falsh_data" class="online_block">
+                                  <div class="price">
+                                      <div class="price_figure">
+                                          <span class="price_number">土壤水分</span>
+                                      </div>
+                                  </div>
+                                  <ul class="features">
+                                      <li>设备类型: 土壤水分传感器</li>
+                                      <li>sn: 000000000000000025</li>
+                                      <li>设备状态: 在线</li>
+                                      <li>设备别名: 无别名</li>
+                                      <li>土壤水分: 21.5 %</li>
+                                      <li>最后更新时间: <span class="pull-center" am-time-ago="item.server_time"> </span></li>
+                                  </ul>
+                              </li>
+
+                              <li ng-show="falsh_data" class="online_block">
+                                  <div class="price">
+                                      <div class="price_figure">
+                                          <span class="price_number">土壤温度</span>
+                                      </div>
+                                  </div>
+                                  <ul class="features">
+                                      <li>设备类型: 土壤温度传感器</li>
+                                      <li>sn: 000000000000000015</li>
+                                      <li>设备状态: 在线</li>
+                                      <li>设备别名: 无别名</li>
+                                      <li>土壤温度: 7.6 °C</li>
+                                      <li>最后更新时间: <span class="pull-center" am-time-ago="item.server_time"> </span></li>
+                                  </ul>
+                              </li>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--end equipment -->
+
+                <div ng-if="statistics_show" style="overflow: auto;zoom: 1">
+                    <div class="col-md-12">
+
+                        <div class="text-muted">
+                            <span class="hand"
+                                  ng-class="{'me-active': 'today' == optsionPool[padData.smartgate.sn].chartDate}"
+                                  ng-click="selectDate('today', padData.smartgate.sn)">今天</span>
+                            <span class="hand"
+                                  ng-class="{'me-active': 'week' == optsionPool[padData.smartgate.sn].chartDate}"
+                                  ng-click="selectDate('week', padData.smartgate.sn)">本周</span>
+                            <span class="hand"
+                                  ng-class="{'me-active': 'month' == optsionPool[padData.smartgate.sn].chartDate}"
+                                  ng-click="selectDate('month', padData.smartgate.sn)">本月</span>
+                            <span class="hand"
+                                  ng-class="{'me-active': 'scope2' == optsionPool[padData.smartgate.sn].chartSize}"
+                                  ng-click="selectSize('scope2', padData.smartgate.sn)">小时</span>
+                            <span class="hand" ng-show="optsionPool[padData.smartgate.sn].chartDate == 'today' ||
+                            optsionPool[padData.smartgate.sn].chartDate == 'week'"
+                                  ng-class="{'me-active': 'scope1' == optsionPool[padData.smartgate.sn].chartSize}"
+                                  ng-click="selectSize('scope1', padData.smartgate.sn)">20分钟</span>
+                                <span class="hand"
+                                      ng-show="optsionPool[padData.smartgate.sn].chartDate == 'today'"
+                                      ng-class="{'me-active': 'scope0' == optsionPool[padData.smartgate.sn].chartSize}"
+                                      ng-click="selectSize('scope0', padData.smartgate.sn)">5分钟</span>
+                        </div>
+                        <div class="text-muted1">
+                            <span class="hand"
+                                  ng-class="{'me-active': 'line' == optsionPool[padData.smartgate.sn].chartType}"
+                                  ng-click="selectType('line', padData.smartgate.sn)">线性图</span>
+                            <span class="hand"
+                                  ng-class="{'me-active': 'column' == optsionPool[padData.smartgate.sn].chartType}"
+                                  ng-click="selectType('column', padData.smartgate.sn)">柱状图</span>
+                            <span class="hand"
+                                  ng-class="{'me-active': 'area' == optsionPool[padData.smartgate.sn].chartType}"
+                                  ng-click="selectType('area', padData.smartgate.sn)">面积图</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <highchart config="chartConfig[padData.smartgate.sn +'temperature']"
+                                   style="height:125px;"></highchart>
+                        <highchart config="chartConfig[padData.smartgate.sn + 'humidity']"
+                                   style="height:125px;"></highchart>
+                        <highchart config="chartConfig[padData.smartgate.sn + 'illumination']"
+                                   style="height:125px;"></highchart>
+                    </div>
+                </div>
+                <!--end statistics-->
+
+               <!-- <div ng-if="control_show">
+                    <div ng-repeat="sensor in padData.components">
+                        <div ng-show="sensor.dev_type == 'erelay2'" class="me_sensor_dev col-md-3 row">
+                            <div style="font-size: 1.1em;width: 50%;float: left">
+                                <div style="text-align: center">
+                                    <img class="soil_th1" src="../assets/img/col.png">
+                                </div>
+                                <div class="sensor_left">
+                                    <div>
+                                        <span> 设备名称: {{sensor.dev_name}} </span>
+                                    </div>
+                                    <div>
+                                        <span> 设备类型: 卷帘机控制器 </span>
+                                    </div>
+                                    <div>
+                                        <span ng-show="sensor.online_state == 'online'">设备状态: 在线</span>
+                                        <span ng-show="sensor.online_state == 'offline'">设备状态: 离线</span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <li ng-show="item.status == 0">卷帘机状态: 上行</li>
+                            <li ng-show="item.status == 1">卷帘机状态: 下行</li>
+                            <li ng-show="item.status == 2">卷帘机状态: 停止</li>
+
+                            <div class="sensor_right">
+                                <div>
+                                    <div style="margin-top: 10px">
+                                    <span class="btn btn-sm btn-danger"
+                                          ng-click="toggleSwitch(sensor.sn + 'top',sensor.status)"
+                                          ng-show="sensor.status !== 0 || switchBtns"> <span
+                                            ng-show="switchBtnsLoading[sensor.sn + 'top']">
+                                    <i class="fa fa-spinner fa-spin"></i>&nbsp; </span> 上行 </span>
+                                <span class="btn btn-sm btn-success" ng-click="toggleSwitch(sensor.sn + 'top')"
+                                      ng-show="sensor.status === 0 || switchBtns"> <span
+                                        ng-show="switchBtnsLoading[sensor.sn + 'top']">
+                                       <i class="fa fa-spinner fa-spin"></i>&nbsp; </span> 上行 </span>
+                                    </div>
+
+                                    <div>
+                                    <span class="btn btn-sm btn-danger" ng-click="toggleSwitch(sensor.sn + 'stop')"
+                                          ng-show="sensor.status !== 2 || switchBtns"> <span
+                                            ng-show="switchBtnsLoading[sensor.sn + 'stop']">
+                                    <i class="fa fa-spinner fa-spin"></i>&nbsp; </span> 停止 </span>
+                                <span class="btn btn-sm btn-success" ng-click="toggleSwitch(sensor.sn + 'stop')"
+                                      ng-show="sensor.status === 2 || switchBtns"> <span
+                                        ng-show="switchBtnsLoading[sensor.sn + 'stop']"> <i
+                                        class="fa fa-spinner fa-spin"></i>&nbsp; </span> 停止 </span>
+                                    </div>
+
+                                    <div>
+                                    <span class="btn btn-sm btn-danger" ng-click="toggleSwitch(sensor.sn + 'bottom')"
+                                          ng-show="sensor.status !== 1 || switchBtns"> <span
+                                            ng-show="switchBtnsLoading[sensor.sn + 'bottom']">
+                                    <i class="fa fa-spinner fa-spin"></i>&nbsp; </span> 下行 </span>
+                                <span class="btn btn-sm btn-success" ng-click="toggleSwitch(sensor.sn + 'bottom')"
+                                      ng-show="sensor.status === 1 || switchBtns"> <span
+                                        ng-show="switchBtnsLoading[sensor.sn + 'bottom']"> <i
+                                        class="fa fa-spinner fa-spin"></i>&nbsp; </span> 下行 </span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>-->
+                <!--end control-->
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- container -->
+</body>
+</html>

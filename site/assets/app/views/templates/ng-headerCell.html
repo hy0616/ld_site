@@ -1,0 +1,16 @@
+<div class="headerCell">
+    <span>全选</span>
+    <!--<button class="button gray" >设为已读</button>-->
+
+    <a ng-click="setting_onread()" ng-show="unread_event">设为已读</a>
+    <a ng-click="refresh()">刷新</a>
+
+    <!--<input type="image" ng-click="refresh()" ng-show="refreshing" src="assets/img/refresh.png"
+           style=" float: right;margin-right: 10px;">
+    <input type="image" ng-show="!refreshing" src="assets/img/_refresh.png" style=" float: right;margin-right: 10px;">-->
+
+    <input ng-show="!unread_event" type="text"
+           ng-model="miinput.inputText" placeholder="请输入搜索内容"/>
+    <span ng-show="!unread_event" style="float: right;margin-right: 10px;">搜索:</span>
+
+</div>

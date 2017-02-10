@@ -1,0 +1,44 @@
+<div class="message_row" ng-click="getrow(row)" data-toggle="modal" data-target="#myModal1">
+    <label ng-show="unread_event" style="margin-left: 23px;">
+        <input type="image" src="assets/img/news.png">
+    </label>
+    <label ng-class="{'click_onread':!unread_event,'unread':unread_event}" style="margin-left: 23px;">
+        <span>{{row.entity.detail}}</span>
+    </label>
+    <label class="date_style">
+        <span>{{row.entity.event_date | date:'yyyy-MM-dd'}}</span>
+    </label>
+</div>
+
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">报警详细</h4>
+            </div>
+            <div class="modal-body">
+                <div class="detailed">
+                    <ul>
+                        <li>设备编号：{{detailed.sn}}</li>
+                        <li ng-show="detailed.smartgate_name === undefined || detailed.smartgate_name === 'undefined'">网关名称：未知网关</li>
+                        <li ng-show="detailed.smartgate_name !== undefined && detailed.smartgate_name !== 'undefined'">网关名称：{{detailed.smartgate_name}}</li>
+                        <li>网关编号：{{detailed.smartgate_sn}}</li>
+                        <li>事件类型：{{detailed.event_type}}</li>
+                        <li>事件名称：{{detailed.event_name}}</li>
+                        <li>事件等级：{{detailed.event_level}}</li>
+                        <li>事件时间：<!--{{detailed.event_date}}-->{{detailed.event_date | date:'yyyy-MM-dd HH:mm:ss'}}</li>
+                        <li>详细内容：{{detailed.detail}}</li>
+                    </ul>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -1,0 +1,75 @@
+<div class="personal_main" ng-controller="personalCtl">
+    <div>
+        <div class="personal_nav">
+            <ul>
+                <li ng-repeat="navUl in personNav" ng-class="{'personal_nav_active':navUl.label == navLabel,
+                'personal_nav_blur':navUl.label != navLabel}">
+                    <a ng-click="switchNumber(navUl)">
+                        <img ng-src={{navUl.img}}>
+                        <span>{{navUl.label}}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="personal_content" ng-switch="navLabel">
+            <div ng-switch-when="个人信息">
+
+                <div class="personal_info">
+
+                    <div style="padding-top: 136px">
+                        <label>用户名: &nbsp;{{UserDev.username}}</label>
+                    </div>
+
+                    <div>
+                        <label>昵称: &nbsp;</label>
+                        <input type="text" ng-model="nicknames">
+                    </div>
+
+                    <div>
+                        <label ng-if="UserDev.phone == '' || UserDev.phone == undefined">电话: &nbsp;无</label>
+                        <label ng-if="UserDev.phone != '' && UserDev.phone != undefined">电话: &nbsp;{{UserDev.phone}}</label>
+                    </div>
+
+                    <div>
+                        <label ng-if="UserDev.email == '' || UserDev.email == undefined">邮箱: &nbsp;无</label>
+                        <label ng-if="UserDev.email != '' && UserDev.email != undefined">邮箱: &nbsp;{{UserDev.email}}</label>
+                    </div>
+
+                    <div style="margin: 30px 0 0 18%">
+                        <input type="button" value="保存" class="btn btn-primary" style="width: 100px"
+                               ng-click="update_nicknames(nicknames)">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div ng-switch-when="修改密码">
+
+                <div class="updatePwd">
+
+                    <div style="padding-top: 136px">
+                        <label>原密码: &nbsp;</label>
+                        <input type="text" ng-model="updateData.password" placeholder="请输入原密码"
+                               onfocus="this.placeholder = ''" onblur="this.placeholder = '请输入原密码'">
+                    </div>
+
+                    <div>
+                        <label>新密码: &nbsp;</label>
+                        <input type="text" ng-model="updateData.password_new" placeholder="请输入新密码"
+                               onfocus="this.placeholder = ''" onblur="this.placeholder = '请输入新密码'">
+                    </div>
+
+                    <div>
+                        <input type="button" value="保存" class="btn btn-primary" style="width: 80px"
+                               ng-click="update_pwd()">
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
